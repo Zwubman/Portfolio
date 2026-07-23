@@ -7,8 +7,27 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Toaster } from 'react-hot-toast';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 
-export default function App() {
+function ToasterWithTheme() {
+  const { isDark } = useTheme();
+  return (
+    <Toaster
+      position="bottom-right"
+      toastOptions={{
+        style: {
+          background: isDark ? '#0d0d2b' : '#ffffff',
+          color: isDark ? '#ffffff' : '#1a0533',
+          border: '1px solid rgba(124, 58, 237, 0.3)',
+          fontFamily: "'Poppins', sans-serif",
+          fontSize: '14px',
+        },
+      }}
+    />
+  );
+}
+
+function AppContent() {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,16 +50,15 @@ export default function App() {
           />
         </Routes>
       </Router>
-      <Toaster
-        position="bottom-right"
-        toastOptions={{
-          style: {
-            background: '#13102e',
-            color: '#e9d5ff',
-            border: '1px solid rgba(139, 92, 246, 0.2)',
-          },
-        }}
-      />
+      <ToasterWithTheme />
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }

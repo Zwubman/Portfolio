@@ -1,60 +1,94 @@
-import { Heart, Github, Linkedin, Mail, ArrowUp } from 'lucide-react';
+import { Github, Linkedin, Mail, ArrowUp, Heart } from 'lucide-react';
 
 export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
-    <footer className="relative bg-[#080620] border-t border-purple-500/10">
-      {/* Subtle gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-purple-900/5 to-transparent pointer-events-none" />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer
+      className="relative border-t"
+      style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border)' }}
+    >
+      <div
+        className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-10"
+      >
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Brand */}
           <div className="text-center md:text-left">
-            <h3 className="text-lg font-bold bg-gradient-to-r from-purple-200 to-fuchsia-200 bg-clip-text text-transparent">
-              Wubamlak Girum
+            <h3
+              className="text-lg font-bold"
+              style={{ color: 'var(--text-primary)', fontFamily: "'Poppins', sans-serif" }}
+            >
+              Wubamlak<span style={{ color: 'var(--accent)' }}>.</span>
             </h3>
-            <p className="text-purple-300/50 text-sm mt-1">Full Stack Developer</p>
+            <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
+              Full Stack Developer
+            </p>
           </div>
 
-          {/* Social links */}
-          <div className="flex items-center gap-4">
+          {/* Nav mini links */}
+          <div className="hidden md:flex items-center gap-5 text-sm" style={{ color: 'var(--text-secondary)' }}>
+            {['About', 'Work', 'Skills', 'Projects', 'Contact'].map((item) => (
+              <button
+                key={item}
+                onClick={() => {
+                  const id = item === 'Work' ? '#experience' : `#${item.toLowerCase()}`;
+                  document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="hover:underline transition-colors cursor-pointer"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+
+          {/* Socials + back to top */}
+          <div className="flex items-center gap-3">
             {[
-              { icon: Github, href: 'https://github.com/Zwubman', label: 'GitHub' },
+              { icon: Github,   href: 'https://github.com/Zwubman',        label: 'GitHub' },
               { icon: Linkedin, href: 'https://linkedin.com/in/wubamlak', label: 'LinkedIn' },
-              { icon: Mail, href: 'mailto:wubamlakgirum@gmail.com', label: 'Email' },
+              { icon: Mail,     href: 'mailto:wubamlakgirum@gmail.com',   label: 'Email' },
             ].map(({ icon: Icon, href, label }) => (
               <a
                 key={label}
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/10 flex items-center justify-center text-purple-300/60 hover:text-purple-200 hover:bg-purple-500/20 hover:border-purple-500/30 transition-all duration-300"
+                className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300"
+                style={{
+                  backgroundColor: 'rgba(124,58,237,0.08)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-secondary)',
+                }}
                 aria-label={label}
               >
-                <Icon size={18} />
+                <Icon size={16} />
               </a>
             ))}
+            <button
+              onClick={scrollToTop}
+              className="ml-1 w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer"
+              style={{
+                background: 'linear-gradient(to bottom right, rgba(124,58,237,0.2), rgba(162,28,175,0.2))',
+                border: '1px solid var(--border)',
+                color: 'var(--accent)',
+              }}
+              aria-label="Back to top"
+            >
+              <ArrowUp size={16} />
+            </button>
           </div>
-
-          {/* Back to top */}
-          <button
-            onClick={scrollToTop}
-            className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-fuchsia-500/20 border border-purple-500/20 flex items-center justify-center text-purple-300 hover:text-white hover:from-purple-500/30 hover:to-fuchsia-500/30 transition-all duration-300 cursor-pointer"
-            aria-label="Back to top"
-          >
-            <ArrowUp size={18} />
-          </button>
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 pt-6 border-t border-purple-500/10 text-center">
-          <p className="text-purple-300/40 text-sm flex items-center justify-center gap-1">
+        <div className="mt-8 pt-6 text-center border-t" style={{ borderColor: 'var(--border)' }}>
+          <p
+            className="text-sm flex items-center justify-center gap-1.5"
+            style={{ color: 'var(--text-muted)' }}
+          >
             © {new Date().getFullYear()} Wubamlak Girum. Built with
-            <Heart size={14} className="text-fuchsia-400/60" fill="currentColor" />
+            <Heart size={13} style={{ color: 'var(--accent)' }} fill="currentColor" />
+            using React & Node.js
           </p>
         </div>
       </div>

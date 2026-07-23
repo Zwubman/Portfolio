@@ -1,4 +1,5 @@
 import HeroSection from '../components/sections/HeroSection';
+import AboutSection from '../components/sections/AboutSection';
 import SkillsSection from '../components/sections/SkillsSection';
 import ExperienceSection from '../components/sections/ExperienceSection';
 import ProjectsSection from '../components/sections/ProjectsSection';
@@ -8,10 +9,14 @@ import Footer from '../components/layout/Footer';
 
 export default function Home() {
   return (
-    <div className="bg-[#0E0B24] min-h-screen text-purple-100 selection:bg-purple-500/30 selection:text-white">
+    <div
+      className="min-h-screen selection:bg-[#7c3aed]/30 selection:text-white"
+      style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}
+    >
       <Navbar />
       <main>
         <HeroSection />
+        <AboutSection />
         <SkillsSection />
         <ExperienceSection />
         <ProjectsSection />

@@ -1,95 +1,127 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGetProjectsQuery } from '../../store/services/projectsApi';
-import { ExternalLink, Github, X, Eye, Star } from 'lucide-react';
+import { ExternalLink, Github, X, Eye } from 'lucide-react';
+
+const mockProjectsFallback = [
+  {
+    id: 'mp1',
+    title: 'Microfinance Transaction Engine',
+    description:
+      'A performant transaction ledger engine built for microfinance systems. Architected with atomic transactions to guarantee consistency, comprehensive audit logs, and multi-tier Role-Based Access Control.',
+    tags: ['Node.js', 'Express.js', 'PostgreSQL', 'Sequelize'],
+    github_url: 'https://github.com/Zwubman',
+    live_url: '',
+    featured: true,
+  },
+  {
+    id: 'mp2',
+    title: 'Land Administration System Portal',
+    description:
+      'An enterprise web application developed to coordinate regional zone and woreda level land registrations. Implemented secure regional RBAC privileges and real-time alerts workflow.',
+    tags: ['React', 'Redux Toolkit', 'Node.js', 'PostgreSQL'],
+    github_url: 'https://github.com/Zwubman',
+    live_url: '',
+    featured: true,
+  },
+  {
+    id: 'mp3',
+    title: 'Askuala Payment Hub',
+    description:
+      'Integrates payment gateways, local banking SMS notification APIs, and automated employee/student onboarding submodules, streamlining real-time financial tracking.',
+    tags: ['JavaScript', 'Express.js', 'SMS API', 'REST API'],
+    github_url: 'https://github.com/Zwubman',
+    live_url: '',
+    featured: false,
+  },
+  {
+    id: 'mp4',
+    title: 'Birr Track Finance App',
+    description:
+      'An offline-first personal budget manager showcasing local SQLite repository integration, robust transaction records, and clean dynamic charts visualization.',
+    tags: ['React', 'TypeScript', 'SQLite', 'Tailwind CSS'],
+    github_url: 'https://github.com/Zwubman',
+    live_url: '',
+    featured: false,
+  },
+];
+
+// Deterministic gradient per card
+const projectGradients = [
+  'linear-gradient(135deg, rgba(124,58,237,0.3) 0%, rgba(30,27,75,0.8) 100%)',
+  'linear-gradient(135deg, rgba(162,28,175,0.3) 0%, rgba(30,27,75,0.8) 100%)',
+  'linear-gradient(135deg, rgba(79,70,229,0.3) 0%, rgba(30,27,75,0.8) 100%)',
+  'linear-gradient(135deg, rgba(126,34,206,0.3) 0%, rgba(30,27,75,0.8) 100%)',
+  'linear-gradient(135deg, rgba(109,40,217,0.3) 0%, rgba(30,27,75,0.8) 100%)',
+  'linear-gradient(135deg, rgba(147,51,234,0.3) 0%, rgba(30,27,75,0.8) 100%)',
+];
 
 export default function ProjectsSection() {
-  const { data: projects = [], isLoading } = useGetProjectsQuery();
+  const { data: serverProjects = [], isLoading } = useGetProjectsQuery();
+  const projects =
+    serverProjects && serverProjects.length > 0 ? serverProjects : mockProjectsFallback;
   const [selectedProject, setSelectedProject] = useState(null);
-  const [activeFilter, setActiveFilter] = useState('All');
-
-  // Gather unique tags
-  const allTags = ['All', ...new Set(projects.flatMap((p) => p.tags || []))];
-
-  const filteredProjects =
-    activeFilter === 'All'
-      ? projects
-      : projects.filter((p) => (p.tags || []).includes(activeFilter));
 
   return (
-    <section id="projects" className="relative py-24 sm:py-32">
-      <div className="absolute right-0 top-1/4 w-[400px] h-[400px] bg-fuchsia-600/5 rounded-full blur-[120px] pointer-events-none" />
+    <section
+      id="projects"
+      className="relative py-24 sm:py-32"
+      style={{ backgroundColor: 'var(--bg-primary)' }}
+    >
+      <div className="absolute right-0 top-1/4 w-[400px] h-[400px] bg-violet-900/8 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        {/* Section label */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="mb-16"
         >
-          <span className="inline-block px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-purple-400 bg-purple-500/10 border border-purple-500/20 rounded-full mb-4">
+          <p className="text-sm font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--accent)' }}>
             Portfolio
-          </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-purple-100 mb-4" style={{ fontFamily: "'Outfit', sans-serif" }}>
-            Featured Projects
-          </h2>
-          <p className="text-purple-200/50 max-w-xl mx-auto">
-            A selection of projects that showcase my skills and passion for development.
+          </p>
+          <div className="flex items-end gap-6">
+            <h2
+              className="text-4xl sm:text-5xl font-black"
+              style={{ color: 'var(--text-primary)', fontFamily: "'Poppins', sans-serif" }}
+            >
+              Projects.
+            </h2>
+            <div
+              className="flex-1 h-px mb-3 hidden sm:block"
+              style={{ background: 'linear-gradient(to right, var(--border-hover), transparent)' }}
+            />
+          </div>
+          <p className="max-w-2xl mt-4 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+            These projects showcase my practical skills and experience, each with descriptions
+            and links to code repositories and live demos. They demonstrate my ability to handle
+            complex challenges, adapt to different technologies, and oversee projects from start
+            to finish.
           </p>
         </motion.div>
 
-        {/* Filter tags */}
-        {allTags.length > 1 && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-2 mb-12"
-          >
-            {allTags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => setActiveFilter(tag)}
-                className={`px-4 py-1.5 text-xs font-medium rounded-full border transition-all duration-300 cursor-pointer ${
-                  activeFilter === tag
-                    ? 'bg-purple-500/20 border-purple-500/40 text-purple-200'
-                    : 'bg-transparent border-purple-500/10 text-purple-300/50 hover:border-purple-500/30 hover:text-purple-200'
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
-          </motion.div>
-        )}
-
         {isLoading ? (
-          <div className="flex justify-center">
-            <div className="w-8 h-8 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+          <div className="flex justify-center py-20">
+            <div className="w-8 h-8 rounded-full animate-spin" style={{ border: '2px solid var(--border)', borderTopColor: '#7c3aed' }} />
           </div>
-        ) : filteredProjects.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20"
-          >
-            <Star size={48} className="mx-auto text-purple-500/20 mb-4" />
-            <p className="text-purple-200/40 text-lg">No projects yet. Check back soon!</p>
-          </motion.div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project, idx) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map((project, idx) => (
               <motion.div
                 key={project.id}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="group relative rounded-2xl overflow-hidden bg-gradient-to-br from-purple-500/5 to-fuchsia-500/5 border border-purple-500/10 hover:border-purple-500/25 transition-all duration-300"
+                className="group relative rounded-2xl overflow-hidden card-base"
               >
-                {/* Image */}
-                <div className="relative h-48 bg-gradient-to-br from-purple-900/40 to-fuchsia-900/40 overflow-hidden">
+                {/* Image / gradient header */}
+                <div
+                  className="relative h-48 overflow-hidden"
+                  style={{ background: projectGradients[idx % projectGradients.length] }}
+                >
                   {project.image_url ? (
                     <img
                       src={project.image_url}
@@ -98,17 +130,24 @@ export default function ProjectsSection() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <div className="text-4xl font-bold text-purple-500/20" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                      <div
+                        className="text-6xl font-black text-white/20"
+                        style={{ fontFamily: "'Poppins', sans-serif" }}
+                      >
                         {project.title?.charAt(0)}
                       </div>
                     </div>
                   )}
 
-                  {/* Overlay on hover */}
-                  <div className="absolute inset-0 bg-[#0E0B24]/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
+                  {/* Hover overlay */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-sm"
+                    style={{ backgroundColor: 'rgba(5, 8, 22, 0.65)' }}
+                  >
                     <button
                       onClick={() => setSelectedProject(project)}
-                      className="p-2.5 rounded-xl bg-purple-500/20 border border-purple-500/30 text-purple-200 hover:bg-purple-500/30 transition-all cursor-pointer"
+                      className="p-2.5 rounded-xl transition-all cursor-pointer"
+                      style={{ backgroundColor: '#7c3aed', color: '#fff' }}
                     >
                       <Eye size={18} />
                     </button>
@@ -117,7 +156,8 @@ export default function ProjectsSection() {
                         href={project.github_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2.5 rounded-xl bg-purple-500/20 border border-purple-500/30 text-purple-200 hover:bg-purple-500/30 transition-all"
+                        className="p-2.5 rounded-xl transition-all"
+                        style={{ backgroundColor: '#7c3aed', color: '#fff' }}
                       >
                         <Github size={18} />
                       </a>
@@ -127,7 +167,8 @@ export default function ProjectsSection() {
                         href={project.live_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2.5 rounded-xl bg-purple-500/20 border border-purple-500/30 text-purple-200 hover:bg-purple-500/30 transition-all"
+                        className="p-2.5 rounded-xl transition-all"
+                        style={{ backgroundColor: '#a21caf', color: '#fff' }}
                       >
                         <ExternalLink size={18} />
                       </a>
@@ -136,7 +177,7 @@ export default function ProjectsSection() {
 
                   {/* Featured badge */}
                   {project.featured && (
-                    <div className="absolute top-3 right-3 px-2.5 py-1 text-xs font-semibold text-amber-300 bg-amber-500/20 border border-amber-500/30 rounded-full backdrop-blur-sm">
+                    <div className="absolute top-3 right-3 px-2.5 py-1 text-xs font-semibold text-[#fbbf24] bg-[#fbbf24]/15 border border-[#fbbf24]/30 rounded-full backdrop-blur-md">
                       Featured
                     </div>
                   )}
@@ -144,15 +185,28 @@ export default function ProjectsSection() {
 
                 {/* Content */}
                 <div className="p-5">
-                  <h3 className="text-lg font-bold text-purple-100 mb-2">{project.title}</h3>
-                  <p className="text-purple-200/50 text-sm line-clamp-2 mb-4">{project.description}</p>
+                  <h3
+                    className="text-lg font-bold mb-2 transition-colors"
+                    style={{ color: 'var(--text-primary)', fontFamily: "'Poppins', sans-serif" }}
+                  >
+                    {project.title}
+                  </h3>
+                  <p className="text-sm line-clamp-2 mb-4 leading-relaxed transition-colors" style={{ color: 'var(--text-secondary)' }}>
+                    {project.description}
+                  </p>
                   <div className="flex flex-wrap gap-1.5">
                     {(project.tags || []).slice(0, 4).map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-0.5 text-xs text-purple-300/60 bg-purple-500/10 border border-purple-500/10 rounded-md"
+                        className="px-2.5 py-0.5 text-xs font-medium rounded-full tech-pill"
+                        style={{
+                          backgroundColor: 'rgba(124,58,237,0.1)',
+                          borderColor: 'rgba(124,58,237,0.2)',
+                          borderWidth: '1px',
+                          color: 'var(--accent)',
+                        }}
                       >
-                        {tag}
+                        #{tag}
                       </span>
                     ))}
                   </div>
@@ -170,7 +224,8 @@ export default function ProjectsSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-[#0E0B24]/90 backdrop-blur-xl flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-xl"
+            style={{ backgroundColor: 'rgba(5, 8, 22, 0.85)' }}
             onClick={() => setSelectedProject(null)}
           >
             <motion.div
@@ -178,9 +233,9 @@ export default function ProjectsSection() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-2xl rounded-2xl bg-[#13102e] border border-purple-500/20 overflow-hidden shadow-2xl"
+              className="w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl"
+              style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)' }}
             >
-              {/* Header image */}
               {selectedProject.image_url && (
                 <img
                   src={selectedProject.image_url}
@@ -191,24 +246,37 @@ export default function ProjectsSection() {
 
               <div className="p-6 sm:p-8">
                 <div className="flex items-start justify-between mb-4">
-                  <h3 className="text-2xl font-bold text-purple-100">{selectedProject.title}</h3>
+                  <h3
+                    className="text-2xl font-bold"
+                    style={{ color: 'var(--text-primary)', fontFamily: "'Poppins', sans-serif" }}
+                  >
+                    {selectedProject.title}
+                  </h3>
                   <button
                     onClick={() => setSelectedProject(null)}
-                    className="p-1.5 rounded-lg text-purple-300/50 hover:text-white hover:bg-purple-500/10 transition-all cursor-pointer"
+                    className="p-1.5 rounded-lg transition-all cursor-pointer"
+                    style={{ color: 'var(--text-secondary)' }}
                   >
                     <X size={20} />
                   </button>
                 </div>
 
-                <p className="text-purple-200/60 leading-relaxed mb-6">{selectedProject.description}</p>
+                <p className="leading-relaxed mb-6" style={{ color: 'var(--text-secondary)' }}>
+                  {selectedProject.description}
+                </p>
 
                 <div className="flex flex-wrap gap-2 mb-6">
                   {(selectedProject.tags || []).map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 text-xs text-purple-300/70 bg-purple-500/10 border border-purple-500/15 rounded-full"
+                      className="px-3 py-1 text-xs rounded-full"
+                      style={{
+                        backgroundColor: 'rgba(124,58,237,0.1)',
+                        border: '1px solid rgba(124,58,237,0.2)',
+                        color: 'var(--accent)',
+                      }}
                     >
-                      {tag}
+                      #{tag}
                     </span>
                   ))}
                 </div>
@@ -219,7 +287,12 @@ export default function ProjectsSection() {
                       href={selectedProject.github_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-200 text-sm font-medium hover:bg-purple-500/20 transition-all"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl border text-sm font-medium transition-all"
+                      style={{
+                        borderColor: 'var(--accent)',
+                        color: 'var(--text-primary)',
+                        backgroundColor: 'transparent',
+                      }}
                     >
                       <Github size={16} /> GitHub
                     </a>
@@ -229,7 +302,8 @@ export default function ProjectsSection() {
                       href={selectedProject.live_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white text-sm font-medium hover:opacity-90 transition-all"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-medium hover:opacity-90 transition-all"
+                      style={{ background: 'linear-gradient(to right, #7c3aed, #a21caf)' }}
                     >
                       <ExternalLink size={16} /> Live Demo
                     </a>

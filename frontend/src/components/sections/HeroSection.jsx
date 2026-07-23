@@ -1,152 +1,236 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDown, Download, Mail, Sparkles } from 'lucide-react';
+import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react';
+
+const roles = [
+  'Full Stack Developer',
+  'Frontend Developer',
+  'Backend Developer',
+  'Problem Solver',
+  'Freelancer',
+];
 
 export default function HeroSection() {
-  const scrollToContact = () => {
-    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayed, setDisplayed]  = useState('');
+  const [typing, setTyping]         = useState(true);
 
-  const scrollToProjects = () => {
-    document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  useEffect(() => {
+    const current = roles[roleIndex];
+    let timeout;
+    if (typing) {
+      if (displayed.length < current.length) {
+        timeout = setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), 80);
+      } else {
+        timeout = setTimeout(() => setTyping(false), 2000);
+      }
+    } else {
+      if (displayed.length > 0) {
+        timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 40);
+      } else {
+        setRoleIndex((prev) => (prev + 1) % roles.length);
+        setTyping(true);
+      }
+    }
+    return () => clearTimeout(timeout);
+  }, [displayed, typing, roleIndex]);
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated orbs background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/6 w-[500px] h-[500px] bg-purple-600/15 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/6 w-[400px] h-[400px] bg-fuchsia-700/10 rounded-full blur-[100px] animate-pulse [animation-delay:1s]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-indigo-900/8 rounded-full blur-[140px] animate-pulse [animation-delay:2s]" />
-      </div>
+    <section
+      id="hero"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      style={{ backgroundColor: 'var(--bg-primary)' }}
+    >
+      {/* Star field */}
+      <div className="hero-stars absolute inset-0 pointer-events-none" />
 
-      {/* Grid pattern overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(139,92,246,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.3) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px',
-        }}
-      />
+      {/* Radial orbs */}
+      <div className="absolute top-[20%] left-[15%] w-[350px] h-[350px] bg-purple-700/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-[15%] right-[10%] w-[300px] h-[300px] bg-violet-900/10 rounded-full blur-[80px] pointer-events-none" />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
-        {/* Status badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-purple-400/20 bg-purple-500/10 backdrop-blur-sm mb-8"
-        >
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
-          </span>
-          <span className="text-purple-200/80 text-sm font-medium tracking-wide">
-            Available for opportunities
-          </span>
-        </motion.div>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8 pt-24 pb-16">
 
-        {/* Name */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6"
-          style={{ fontFamily: "'Outfit', sans-serif" }}
-        >
-          <span className="text-purple-100/90">Hi, I'm </span>
-          <span className="bg-gradient-to-r from-purple-400 via-fuchsia-400 to-purple-300 bg-clip-text text-transparent">
-            Wubamlak
-          </span>
-        </motion.h1>
+          {/* ── Left: Text ── */}
+          <div className="flex-1 max-w-2xl">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-lg sm:text-xl font-medium mb-2"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              Hi, I'm
+            </motion.p>
 
-        {/* Role */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex items-center justify-center gap-3 mb-6"
-        >
-          <Sparkles size={20} className="text-fuchsia-400/70" />
-          <span className="text-xl sm:text-2xl md:text-3xl font-semibold text-purple-200/70" style={{ fontFamily: "'Outfit', sans-serif" }}>
-            Full Stack Developer
-          </span>
-          <Sparkles size={20} className="text-fuchsia-400/70" />
-        </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-5xl sm:text-6xl md:text-7xl font-black mb-4 leading-tight"
+              style={{ fontFamily: "'Poppins', sans-serif", color: 'var(--text-primary)' }}
+            >
+              Wubamlak
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7c3aed] to-[#c026d3]">
+                {' '}Girum
+              </span>
+            </motion.h1>
 
-        {/* Bio */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-purple-200/50 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10"
-        >
-          I build scalable, performant web applications with modern technologies.
-          Specializing in React, Node.js, and PostgreSQL — turning ideas into
-          elegant digital solutions.
-        </motion.p>
+            {/* Typewriter */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.25 }}
+              className="text-2xl sm:text-3xl font-semibold mb-6 h-10 flex items-center"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              <span>{displayed}</span>
+              <span className="cursor-blink ml-0.5 inline-block w-0.5 h-7 bg-[#915eff]" />
+            </motion.div>
 
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <button
-            onClick={scrollToProjects}
-            className="group relative px-8 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-semibold text-sm shadow-lg shadow-purple-600/25 hover:shadow-purple-600/40 hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.35 }}
+              className="text-base sm:text-lg leading-relaxed mb-8 max-w-xl"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              I build scalable, performant web applications with modern technologies.
+              Specializing in React, Node.js, and PostgreSQL — turning ideas into elegant
+              digital solutions with clean, maintainable code.
+            </motion.p>
+
+            {/* CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.45 }}
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-10"
+            >
+              <button
+                onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-8 py-3.5 rounded bg-gradient-to-r from-[#7c3aed] to-[#a21caf] text-white font-semibold text-sm hover:opacity-90 hover:shadow-lg hover:shadow-purple-600/30 transition-all duration-300 cursor-pointer"
+              >
+                Get In Touch
+              </button>
+              <a
+                href="mailto:wubamlakgirum@gmail.com"
+                className="px-8 py-3.5 rounded border border-[#915eff] font-semibold text-sm hover:bg-[#915eff]/10 transition-all duration-300 flex items-center gap-2"
+                style={{ color: '#915eff' }}
+              >
+                <Mail size={16} />
+                wubamlakgirum@gmail.com
+              </a>
+            </motion.div>
+
+            {/* Social */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.55 }}
+              className="flex items-center gap-4"
+            >
+              {[
+                { icon: Github,   href: 'https://github.com/Zwubman',          label: 'GitHub' },
+                { icon: Linkedin, href: 'https://linkedin.com/in/wubamlak',   label: 'LinkedIn' },
+              ].map(({ icon: Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110"
+                  style={{
+                    border: '1px solid var(--border)',
+                    color: 'var(--text-secondary)',
+                    backgroundColor: 'transparent',
+                  }}
+                >
+                  <Icon size={18} />
+                </a>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* ── Right: 3D Profile Card ── */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, rotateY: -20 }}
+            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
+            className="flex-shrink-0"
           >
-            <span className="relative z-10 flex items-center gap-2">
-              View My Work
-              <ArrowDown size={16} className="group-hover:translate-y-0.5 transition-transform" />
-            </span>
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-          </button>
-          <button
-            onClick={scrollToContact}
-            className="px-8 py-3.5 rounded-xl border border-purple-500/30 text-purple-200 font-semibold text-sm hover:bg-purple-500/10 hover:border-purple-500/50 transition-all duration-300 flex items-center gap-2 cursor-pointer"
-          >
-            <Mail size={16} />
-            Get In Touch
-          </button>
-        </motion.div>
+            <div className="relative animate-float">
+              {/* Glow ring */}
+              <div className="absolute -inset-4 rounded-full bg-gradient-to-br from-[#7c3aed] to-[#c026d3] opacity-20 blur-xl animate-glow" />
 
-        {/* Tech tags */}
+              {/* Photo */}
+              <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full p-1 bg-gradient-to-br from-[#7c3aed] via-[#a21caf] to-[#7c3aed]">
+                <div className="w-full h-full rounded-full overflow-hidden" style={{ backgroundColor: 'var(--bg-primary)' }}>
+                  <img
+                    src="/profile.jpg"
+                    alt="Wubamlak Girum"
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+              </div>
+
+              {/* Floating badge — role */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.9 }}
+                className="absolute -right-4 top-8 px-3 py-1.5 rounded-full shadow-lg text-xs font-semibold backdrop-blur-sm"
+                style={{
+                  backgroundColor: 'var(--bg-card)',
+                  border: '1px solid var(--border)',
+                  color: '#915eff',
+                }}
+              >
+                Full Stack Dev
+              </motion.div>
+
+              {/* Floating badge — experience */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.0 }}
+                className="absolute -left-4 bottom-10 px-3 py-1.5 rounded-full shadow-lg text-xs font-semibold backdrop-blur-sm"
+                style={{
+                  backgroundColor: 'var(--bg-card)',
+                  border: '1px solid var(--border)',
+                  color: '#c026d3',
+                }}
+              >
+                1+ Yr Experience
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-16 flex flex-wrap items-center justify-center gap-3"
+          transition={{ delay: 1.2 }}
+          className="flex justify-center pb-4"
         >
-          {['React', 'Node.js', 'TypeScript', 'PostgreSQL', 'Docker'].map((tech) => (
-            <span
-              key={tech}
-              className="px-3 py-1.5 text-xs font-medium text-purple-300/50 bg-purple-500/5 border border-purple-500/10 rounded-lg"
+          <button
+            onClick={() => document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' })}
+            className="flex flex-col items-center gap-2 transition-colors cursor-pointer group"
+            style={{ color: 'var(--text-secondary)' }}
+          >
+            <span className="text-xs tracking-widest uppercase font-medium">Scroll Down</span>
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="w-8 h-8 rounded-full border-2 border-[#7c3aed]/40 group-hover:border-[#7c3aed] flex items-center justify-center transition-colors"
             >
-              {tech}
-            </span>
-          ))}
+              <ArrowDown size={14} className="text-[#7c3aed]" />
+            </motion.div>
+          </button>
         </motion.div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-purple-300/30 text-xs tracking-widest uppercase">Scroll</span>
-          <div className="w-5 h-8 border-2 border-purple-400/20 rounded-full flex items-start justify-center p-1">
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1.5 h-1.5 bg-purple-400/50 rounded-full"
-            />
-          </div>
-        </div>
-      </motion.div>
     </section>
   );
 }
