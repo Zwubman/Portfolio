@@ -137,7 +137,7 @@ export default function AboutSection() {
           >
             {/* Mask the left edge so the avatar seamlessly blends into the dark background and never blocks text */}
             <div 
-              className="absolute -right-24 xl:-right-48 bottom-0 w-[140%] h-[115%] overflow-visible pointer-events-none translate-x-16"
+              className="absolute -right-24 xl:-right-48 bottom-0 w-[140%] h-[90%] overflow-visible pointer-events-none translate-x-16"
               style={{
                 WebkitMaskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,1) 25%)',
                 maskImage: 'linear-gradient(to right, transparent 0%, rgba(0,0,0,1) 25%)'
