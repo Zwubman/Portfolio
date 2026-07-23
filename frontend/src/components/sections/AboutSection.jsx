@@ -1,132 +1,148 @@
 import { motion } from 'framer-motion';
-import { Code2, Server, Layers, Lightbulb } from 'lucide-react';
-
-const cards = [
-  {
-    title: 'Full Stack Developer',
-    icon: Layers,
-    description:
-      'I build end-to-end web applications from pixel-perfect frontends to scalable, robust RESTful backends.',
-    color: '#7c3aed',
-  },
-  {
-    title: 'Frontend Developer',
-    icon: Code2,
-    description:
-      'I craft clean, responsive, and animated UI experiences using React, TypeScript, and Tailwind CSS.',
-    color: '#9333ea',
-  },
-  {
-    title: 'Backend Developer',
-    icon: Server,
-    description:
-      'I design high-performance APIs and database architectures using Node.js, Express, and PostgreSQL.',
-    color: '#a21caf',
-  },
-  {
-    title: 'Problem Solving',
-    icon: Lightbulb,
-    description:
-      'I approach every challenge analytically, breaking complex requirements into elegant, maintainable code.',
-    color: '#7e22ce',
-  },
-];
+import { Mail, Github, Linkedin, Instagram } from 'lucide-react';
 
 export default function AboutSection() {
   return (
     <section
       id="about"
-      className="relative py-24 sm:py-32"
+      className="relative py-24 sm:py-32 w-full overflow-hidden"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-purple-900/8 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute right-0 top-1/3 w-[300px] h-[300px] bg-violet-900/8 rounded-full blur-[100px] pointer-events-none" />
+      {/* Background blobs to mimic the wavy design from yonas.live */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div
+          className="absolute -top-[20%] -right-[10%] w-[70vw] h-[70vw] rounded-[100px] rotate-12 opacity-30"
+          style={{ background: 'linear-gradient(45deg, var(--accent-start), transparent)' }}
+        />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-        {/* Section label */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <p className="text-sm font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--accent)' }}>
-            Introduction
-          </p>
-          <div className="flex items-end gap-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8">
+          
+          {/* ── Left Column: Text & Interaction ── */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex-1 max-w-3xl"
+          >
+            <p className="text-sm font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--text-muted)' }}>
+              INTRODUCTION
+            </p>
             <h2
-              className="text-4xl sm:text-5xl font-black"
+              className="text-5xl sm:text-6xl md:text-[5.5rem] font-black mb-8 leading-none"
               style={{ color: 'var(--text-primary)', fontFamily: "'Poppins', sans-serif" }}
             >
               Overview.
             </h2>
-            <div
-              className="flex-1 h-px mb-3 hidden sm:block"
-              style={{ background: 'linear-gradient(to right, var(--border-hover), transparent)' }}
-            />
-          </div>
-        </motion.div>
+            
+            <p
+              className="text-base sm:text-lg leading-relaxed mb-8"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              Hello! I am Wubamlak Girum, a passionate and driven Software Engineer with expertise in modern web technologies and full-stack development. I specialize in transforming ideas into scalable and efficient web applications, from UI design and backend architecture to deployment. I have a strong foundation in designing resilient web applications, integrating real-time services, and optimizing backend operations. My experience spans building high-performance APIs, engineering robust core services for microfinance and land administration platforms, and integrating third-party systems like payment, banking, and SMS APIs. Skills: React.js, Node.js, Express.js, PostgreSQL, MySQL, MongoDB, Sequelize, and Docker. Whether it is ensuring seamless frontend integrations, architecting multi-tier databases, or deploying automated CI/CD pipelines, I aim to deliver robust, user-friendly solutions that are both efficient and secure.
+              <br /><br />
+              Let us collaborate to bring your ideas to life!
+            </p>
 
-        {/* Bio text */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-base sm:text-lg leading-relaxed max-w-3xl mb-20"
-          style={{ color: 'var(--text-secondary)' }}
-        >
-          I'm a skilled software developer with a strong passion for building scalable and
-          efficient web applications. Experienced in JavaScript and TypeScript, I work with
-          frameworks like React on the frontend and Node.js & Express on the backend, paired
-          with databases like PostgreSQL and MongoDB. I'm a quick learner who collaborates
-          closely with clients to create real-world solutions that make an impact. Let's
-          build something amazing together!
-        </motion.p>
-
-        {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {cards.map((card, idx) => {
-            const Icon = card.icon;
-            return (
-              <motion.div
-                key={card.title}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.12 }}
-                className="group relative p-6 rounded-2xl card-base cursor-default"
+            {/* Email link */}
+            <div className="flex items-center gap-3 mb-8">
+              <Mail size={22} style={{ color: '#ea4335' }} />
+              <a
+                href="mailto:wubamlakgirum@gmail.com"
+                className="text-lg hover:underline transition-colors"
+                style={{ color: 'var(--text-secondary)' }}
               >
-                {/* Icon */}
-                <div
-                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-5"
-                  style={{ backgroundColor: `${card.color}18`, border: `1px solid ${card.color}35` }}
-                >
-                  <Icon size={24} style={{ color: card.color }} />
-                </div>
+                wubamlakgirum@gmail.com
+              </a>
+            </div>
 
-                {/* Title */}
-                <h3
-                  className="font-bold text-lg mb-3"
-                  style={{ color: 'var(--text-primary)', fontFamily: "'Poppins', sans-serif" }}
-                >
-                  {card.title}
-                </h3>
+            {/* Social Icons row matching yonase.live style */}
+            <div className="flex items-center gap-4 mb-10">
+              {/* GitHub */}
+              <a
+                href="https://github.com/Zwubman"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 rounded flex items-center justify-center transition-transform hover:-translate-y-1"
+                style={{ backgroundColor: '#ffffff', color: '#000000' }}
+              >
+                <Github size={22} fill="currentColor" />
+              </a>
 
-                {/* Description */}
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                  {card.description}
-                </p>
+              {/* LinkedIn */}
+              <a
+                href="https://linkedin.com/in/wubamlak"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 rounded flex items-center justify-center transition-transform hover:-translate-y-1"
+                style={{ backgroundColor: '#0077b5', color: '#ffffff' }}
+              >
+                <Linkedin size={20} fill="currentColor" />
+              </a>
 
-                {/* Bottom accent */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 h-0.5 rounded-b-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: `linear-gradient(to right, ${card.color}, transparent)` }}
-                />
-              </motion.div>
-            );
-          })}
+              {/* X / Twitter */}
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 rounded flex items-center justify-center transition-transform hover:-translate-y-1"
+                style={{ backgroundColor: '#000000', color: '#ffffff' }}
+              >
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </a>
+
+              {/* Instagram */}
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 rounded flex items-center justify-center transition-transform hover:-translate-y-1"
+                style={{
+                  background: 'radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)',
+                  color: '#ffffff'
+                }}
+              >
+                <Instagram size={22} />
+              </a>
+            </div>
+
+            {/* Resume Button */}
+            <a
+              href="/Wubamlak_Girum_Resume.pdf"
+              download="Wubamlak_Girum_Resume.pdf"
+              className="inline-block px-8 py-3.5 rounded-lg text-white font-semibold text-lg transition-all hover:opacity-90 hover:scale-105"
+              style={{ background: 'var(--accent)' }}
+            >
+              Resume
+            </a>
+          </motion.div>
+
+          {/* ── Right Column: 3D Avatar Image ── */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="flex-shrink-0 relative hidden lg:block"
+          >
+            <div className="relative w-[380px] h-[550px]">
+              {/* Soft glow behind the avatar */}
+              <div 
+                className="absolute inset-x-0 bottom-10 w-full h-1/2 rounded-[100%] blur-[80px]"
+                style={{ background: 'var(--accent-start)', opacity: 0.2 }}
+              />
+              <img
+                src="/developer_avatar.png"
+                alt="3D Developer Avatar"
+                className="w-full h-full object-contain object-bottom drop-shadow-2xl relative z-10"
+              />
+            </div>
+          </motion.div>
+
         </div>
       </div>
     </section>
