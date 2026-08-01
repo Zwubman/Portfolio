@@ -11,37 +11,7 @@ export default function Footer() {
       <div
         className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-10"
       >
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Brand */}
-          <div className="text-center md:text-left">
-            <h3
-              className="text-lg font-bold"
-              style={{ color: 'var(--text-primary)', fontFamily: "'Poppins', sans-serif" }}
-            >
-              Wubamlak<span style={{ color: 'var(--accent)' }}>.</span>
-            </h3>
-            <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
-              Full Stack Developer
-            </p>
-          </div>
-
-          {/* Nav mini links */}
-          <div className="hidden md:flex items-center gap-5 text-sm" style={{ color: 'var(--text-secondary)' }}>
-            {['About', 'Work', 'Skills', 'Projects', 'Contact'].map((item) => (
-              <button
-                key={item}
-                onClick={() => {
-                  const id = item === 'Work' ? '#experience' : `#${item.toLowerCase()}`;
-                  document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="hover:underline transition-colors cursor-pointer"
-                style={{ color: 'var(--text-secondary)' }}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6">
           {/* Socials + back to top */}
           <div className="flex items-center gap-3">
             {[
@@ -86,9 +56,7 @@ export default function Footer() {
             className="text-sm flex items-center justify-center gap-1.5"
             style={{ color: 'var(--text-muted)' }}
           >
-            © {new Date().getFullYear()} Wubamlak Girum. Built with
-            <Heart size={13} style={{ color: 'var(--accent)' }} fill="currentColor" />
-            using React & Node.js
+            © {new Date().getFullYear()} Wubamlak Girum. Built using React & Node.js
           </p>
         </div>
       </div>
