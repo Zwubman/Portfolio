@@ -257,7 +257,7 @@ export default function AboutSection() {
         </div>
 
         {/* ── Specialty Role Cards (full width, below the two columns) ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mt-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mt-24 sm:mt-32">
           {specialtyCards.map((card, idx) => (
             <motion.div
               key={card.title}
