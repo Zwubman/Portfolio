@@ -80,7 +80,7 @@ export default function HeroSection() {
 
         {/* ── Center Computer Image ── */}
         <motion.div 
-          className="w-full flex justify-center relative mt-2 sm:mt-8 lg:mt-12 pointer-events-none z-10"
+          className="w-full flex justify-center relative -mt-6 md:-mt-12 lg:-mt-16 pointer-events-none z-10"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
