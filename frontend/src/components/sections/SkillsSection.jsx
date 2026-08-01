@@ -38,96 +38,7 @@ const mockSkillsFallback = [
   { id: 'e2',  category: 'Environments',name: 'Docker',       icon_name: 'Container', color: '#2496ed' },
 ];
 
-/* ── Specialty role cards ── */
-const specialtyCards = [
-  {
-    title: 'Full Stack\nDeveloper',
-    borderColors: ['#00d4aa', '#7c3aed'],
-    icon: (
-      <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="8"  y="8"  width="16" height="16" rx="3" fill="#7c3aed" opacity="0.9"/>
-        <rect x="28" y="8"  width="16" height="16" rx="3" fill="#00d4aa" opacity="0.9"/>
-        <rect x="8"  y="28" width="16" height="16" rx="3" fill="#00d4aa" opacity="0.9"/>
-        <rect x="28" y="28" width="16" height="16" rx="3" fill="#7c3aed" opacity="0.9"/>
-        <rect x="14" y="14" width="24" height="24" rx="5" fill="url(#fs_g)" opacity="0.55"/>
-        <defs>
-          <linearGradient id="fs_g" x1="0" y1="0" x2="1" y2="1">
-            <stop stopColor="#7c3aed"/><stop offset="1" stopColor="#00d4aa"/>
-          </linearGradient>
-        </defs>
-      </svg>
-    ),
-  },
-  {
-    title: 'Frontend\nDeveloper',
-    borderColors: ['#00d4aa', '#38bdf8'],
-    icon: (
-      <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="10" width="44" height="32" rx="5" fill="#1e1b4b" stroke="#38bdf8" strokeWidth="1.5"/>
-        <rect x="4" y="10" width="44" height="9"  rx="5" fill="#38bdf8" opacity="0.25"/>
-        <circle cx="12" cy="14.5" r="2" fill="#f87171"/>
-        <circle cx="20" cy="14.5" r="2" fill="#fbbf24"/>
-        <circle cx="28" cy="14.5" r="2" fill="#34d399"/>
-        <rect x="10" y="25" width="14" height="3" rx="1.5" fill="#7c3aed" opacity="0.8"/>
-        <rect x="10" y="31" width="22" height="3" rx="1.5" fill="#38bdf8" opacity="0.6"/>
-        <rect x="29" y="24" width="12" height="12" rx="2" fill="#7c3aed" opacity="0.5"/>
-      </svg>
-    ),
-  },
-  {
-    title: 'Backend\nDeveloper',
-    borderColors: ['#38bdf8', '#7c3aed'],
-    icon: (
-      <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="26" cy="26" r="14" stroke="#38bdf8" strokeWidth="2" fill="none" strokeDasharray="4 2"/>
-        <circle cx="26" cy="26" r="8"  fill="url(#be_g)" opacity="0.9"/>
-        <path d="M26 12L26 6M26 46L26 40M12 26L6 26M46 26L40 26" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round"/>
-        <circle cx="26" cy="26" r="3" fill="#ffffff"/>
-        <defs>
-          <linearGradient id="be_g" x1="0" y1="0" x2="1" y2="1">
-            <stop stopColor="#7c3aed"/><stop offset="1" stopColor="#38bdf8"/>
-          </linearGradient>
-        </defs>
-      </svg>
-    ),
-  },
-  {
-    title: 'Problem\nSolving',
-    borderColors: ['#a21caf', '#7c3aed'],
-    icon: (
-      <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="26" cy="26" r="5"  fill="#a21caf" opacity="0.9"/>
-        <circle cx="10" cy="18" r="4"  fill="#7c3aed" opacity="0.85"/>
-        <circle cx="42" cy="18" r="4"  fill="#38bdf8" opacity="0.85"/>
-        <circle cx="10" cy="36" r="4"  fill="#00d4aa" opacity="0.85"/>
-        <circle cx="42" cy="36" r="4"  fill="#7c3aed" opacity="0.85"/>
-        <line x1="14" y1="20" x2="22" y2="24" stroke="#a21caf" strokeWidth="1.5"/>
-        <line x1="38" y1="20" x2="30" y2="24" stroke="#38bdf8" strokeWidth="1.5"/>
-        <line x1="14" y1="34" x2="22" y2="28" stroke="#00d4aa" strokeWidth="1.5"/>
-        <line x1="38" y1="34" x2="30" y2="28" stroke="#7c3aed" strokeWidth="1.5"/>
-        <line x1="10" y1="22" x2="10" y2="32" stroke="#7c3aed" strokeWidth="1.5" opacity="0.5"/>
-        <line x1="42" y1="22" x2="42" y2="32" stroke="#38bdf8" strokeWidth="1.5" opacity="0.5"/>
-      </svg>
-    ),
-  },
-  {
-    title: 'Freelancer',
-    borderColors: ['#7c3aed', '#a21caf'],
-    icon: (
-      <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="26" cy="10" r="5"  fill="#7c3aed" opacity="0.9"/>
-        <circle cx="10" cy="32" r="5"  fill="#a21caf" opacity="0.9"/>
-        <circle cx="42" cy="32" r="5"  fill="#38bdf8" opacity="0.9"/>
-        <circle cx="26" cy="44" r="4"  fill="#00d4aa"  opacity="0.85"/>
-        <line x1="26" y1="15" x2="13" y2="28" stroke="#7c3aed" strokeWidth="1.8"/>
-        <line x1="26" y1="15" x2="39" y2="28" stroke="#38bdf8" strokeWidth="1.8"/>
-        <line x1="13" y1="36" x2="26" y2="41" stroke="#a21caf" strokeWidth="1.8"/>
-        <line x1="39" y1="36" x2="26" y2="41" stroke="#00d4aa" strokeWidth="1.8"/>
-        <line x1="15" y1="32" x2="37" y2="32" stroke="#7c3aed" strokeWidth="1.2" strokeDasharray="3 2" opacity="0.5"/>
-      </svg>
-    ),
-  },
-];
+
 
 export default function SkillsSection() {
   const { data: serverSkills = [], isLoading } = useGetSkillsQuery();
@@ -179,48 +90,6 @@ export default function SkillsSection() {
           </div>
         </motion.div>
 
-        {/* ── Specialty Role Cards ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
-          {specialtyCards.map((card, idx) => (
-            <motion.div
-              key={card.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: idx * 0.09 }}
-              whileHover={{ y: -6, scale: 1.03 }}
-              className="relative group cursor-default"
-            >
-              {/* Gradient border shell */}
-              <div
-                className="absolute inset-0 rounded-2xl transition-opacity duration-300 opacity-70 group-hover:opacity-100"
-                style={{
-                  background: `linear-gradient(135deg, ${card.borderColors[0]}, ${card.borderColors[1]})`,
-                  borderRadius: '16px',
-                }}
-              />
-              {/* Inner card (covers the gradient except the 1.5px border) */}
-              <div
-                className="relative m-[1.5px] flex flex-col items-center justify-center gap-4 py-8 px-4"
-                style={{
-                  backgroundColor: 'var(--bg-card)',
-                  borderRadius: '14px',
-                  boxShadow: '0 4px 24px rgba(0,0,0,0.25)',
-                }}
-              >
-                <div className="flex items-center justify-center w-16 h-16">
-                  {card.icon}
-                </div>
-                <p
-                  className="text-sm font-bold text-center leading-snug whitespace-pre-line"
-                  style={{ color: 'var(--text-primary)' }}
-                >
-                  {card.title}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
 
         {/* ── Tech Skills ── */}
         {isLoading ? (
