@@ -94,9 +94,6 @@ export default function Navbar() {
                     onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
                     onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
                   >
-                    <span className="text-[10px] font-bold" style={{ color: 'var(--accent)' }}>
-                      0{idx + 1}.
-                    </span>
                     {link.name}
                     <span
                       className="absolute bottom-0 left-4 right-4 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
@@ -182,9 +179,6 @@ export default function Navbar() {
                     className="block w-full text-left px-4 py-3 rounded-lg text-sm transition-all cursor-pointer"
                     style={{ color: 'var(--text-secondary)' }}
                   >
-                    <span className="text-xs font-semibold mr-2" style={{ color: 'var(--accent)' }}>
-                      0{idx + 1}.
-                    </span>
                     {link.name}
                   </button>
                 ))}

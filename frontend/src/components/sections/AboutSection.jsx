@@ -41,7 +41,7 @@ export default function AboutSection() {
             </h2>
             
             <p
-              className="text-[16px] sm:text-[17px] leading-[1.8] mb-8 font-[400]"
+              className="text-[16px] sm:text-[17px] leading-[1.8] mb-8 font-[400] text-justify"
               style={{ color: 'var(--text-secondary)' }}
             >
               Hello! I am Wubamlak Girum, a passionate and driven Software Engineer with expertise in modern web technologies and full-stack development. I specialize in transforming ideas into scalable and efficient web applications, from UI design and backend architecture to deployment. I have a strong foundation in designing resilient web applications, integrating real-time services, and optimizing backend operations. My experience spans building high-performance APIs, engineering robust core services for microfinance and land administration platforms, and integrating third-party systems like payment, banking, and SMS APIs. Skills: React.js, Node.js, Express.js, PostgreSQL, MySQL, MongoDB, Sequelize, and Docker. Whether it is ensuring seamless frontend integrations, architecting multi-tier databases, or deploying automated CI/CD pipelines, I aim to deliver robust, user-friendly solutions that are both efficient and secure.
