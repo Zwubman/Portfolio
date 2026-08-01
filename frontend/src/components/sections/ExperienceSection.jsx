@@ -98,10 +98,9 @@ export default function ExperienceSection() {
           </div>
         ) : (
           <div className="relative max-w-5xl mx-auto">
-            {/* Center Timeline Line (Desktop only) */}
             <div
               className="hidden lg:block absolute left-1/2 top-4 bottom-0 w-[2.5px] -translate-x-1/2"
-              style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+              style={{ backgroundColor: 'var(--border)' }}
             />
 
             <div className="space-y-12 lg:space-y-24">
@@ -135,7 +134,7 @@ export default function ExperienceSection() {
                           border: '1.5px solid rgba(124, 58, 237, 0.25)',
                         }}
                       >
-                        <h3 className="text-2xl font-bold mb-1 text-white leading-tight">
+                        <h3 className="text-2xl font-bold mb-1 leading-tight" style={{ color: 'var(--text-primary)' }}>
                           {exp.role}
                         </h3>
                         {/* Only show company if it exists. Note: Screenshot shows "Askuala Link" for the backend dev, but none for the first one */}
@@ -150,10 +149,12 @@ export default function ExperienceSection() {
                           {(exp.bullet_points || []).map((point, pIdx) => (
                             <li
                               key={pIdx}
-                              className="flex items-start gap-4 text-[13.5px] font-normal leading-relaxed text-gray-300"
+                              className="flex items-start gap-4 text-[13.5px] font-normal leading-relaxed"
+                              style={{ color: 'var(--text-secondary)' }}
                             >
                               <span
-                                className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 bg-gray-400/80"
+                                className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
+                                style={{ backgroundColor: 'var(--text-muted)' }}
                               />
                               {point}
                             </li>
@@ -172,7 +173,7 @@ export default function ExperienceSection() {
                         isLeft ? 'justify-start pl-8' : 'justify-end pr-8'
                       } items-center`}
                     >
-                      <span className="text-gray-400/90 text-sm font-medium whitespace-nowrap">
+                      <span className="text-sm font-medium whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
                         {formatDate(exp.start_date)} — {formatDate(exp.end_date)}
                       </span>
                     </motion.div>
