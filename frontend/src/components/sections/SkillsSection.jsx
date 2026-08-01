@@ -109,7 +109,7 @@ export default function SkillsSection() {
             </div>
 
             {/* ── Right: raw icons in horizontal row ── */}
-            <div className="flex-1 flex items-center px-8 py-6 min-h-[300px]">
+            <div className="flex-1 flex items-start px-8 py-6 min-h-[300px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab}
@@ -117,29 +117,36 @@ export default function SkillsSection() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -16 }}
                   transition={{ duration: 0.2 }}
-                  className="flex flex-wrap gap-5 items-center"
+                  className="flex flex-col gap-3 w-full"
                 >
                   {SKILLS[activeTab].map((skill, idx) => (
                     <motion.div
                       key={skill.name}
-                      initial={{ opacity: 0, scale: 0.75 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.18, delay: idx * 0.04 }}
-                      whileHover={{ scale: 1.15, y: -3 }}
-                      title={skill.name}
-                      className="cursor-default"
+                      initial={{ opacity: 0, x: 12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.18, delay: idx * 0.05 }}
+                      whileHover={{ x: 4 }}
+                      className="flex items-center gap-4 cursor-default group"
                     >
+                      {/* Icon */}
                       <img
                         src={skill.iconUrl}
                         alt={skill.name}
-                        width={42}
-                        height={42}
+                        width={36}
+                        height={36}
                         loading="lazy"
-                        className="object-contain"
+                        className="object-contain flex-shrink-0 transition-transform duration-200 group-hover:scale-110"
                         style={{
                           filter: skill.invert ? 'invert(1) brightness(0.8)' : 'none',
                         }}
                       />
+                      {/* Name */}
+                      <span
+                        className="text-sm font-medium transition-colors duration-200"
+                        style={{ color: 'var(--text-secondary)' }}
+                      >
+                        {skill.name}
+                      </span>
                     </motion.div>
                   ))}
                 </motion.div>
