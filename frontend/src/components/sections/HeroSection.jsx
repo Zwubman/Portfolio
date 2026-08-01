@@ -37,11 +37,11 @@ export default function HeroSection() {
     >
       {/* ── Background Waves ── */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-90">
-        <svg viewBox="0 0 1440 600" className="absolute bottom-0 w-full h-[60vh] object-cover" preserveAspectRatio="none" fill="#4c1d95" style={{ opacity: 0.3 }} xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,350L60,330C120,310,240,270,360,265C480,260,600,290,720,310C840,330,960,340,1080,315C1200,290,1320,230,1380,200L1440,170L1440,600L1380,600C1320,600,1200,600,1080,600C960,600,840,600,720,600C600,600,480,600,360,600C240,600,120,600,60,600L0,600Z"></path>
+        <svg viewBox="0 0 1440 600" className="absolute bottom-0 w-full h-[60vh] object-cover" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill="var(--accent-start)" fillOpacity="0.18" d="M0,350L60,330C120,310,240,270,360,265C480,260,600,290,720,310C840,330,960,340,1080,315C1200,290,1320,230,1380,200L1440,170L1440,600L1380,600C1320,600,1200,600,1080,600C960,600,840,600,720,600C600,600,480,600,360,600C240,600,120,600,60,600L0,600Z"></path>
         </svg>
-        <svg viewBox="0 0 1440 600" className="absolute bottom-0 w-full h-[45vh] object-cover" preserveAspectRatio="none" fill="#7c3aed" style={{ opacity: 0.2 }} xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,200L48,225C96,250,192,300,288,300C384,300,480,250,576,215C672,180,768,160,864,180C960,200,1056,260,1152,280C1248,300,1344,280,1392,270L1440,260L1440,600L1392,600C1344,600,1248,600,1152,600C1056,600,960,600,864,600C768,600,672,600,576,600C480,600,384,600,288,600C192,600,96,600,48,600L0,600Z"></path>
+        <svg viewBox="0 0 1440 600" className="absolute bottom-0 w-full h-[45vh] object-cover" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill="var(--accent)" fillOpacity="0.12" d="M0,200L48,225C96,250,192,300,288,300C384,300,480,250,576,215C672,180,768,160,864,180C960,200,1056,260,1152,280C1248,300,1344,280,1392,270L1440,260L1440,600L1392,600C1344,600,1248,600,1152,600C1056,600,960,600,864,600C768,600,672,600,576,600C480,600,384,600,288,600C192,600,96,600,48,600L0,600Z"></path>
         </svg>
       </div>
 
@@ -85,19 +85,31 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          {/* Radial gradient mask softly erases the harsh square background bounds of the image, floating it gracefully */}
-          <div 
-            className="w-full max-w-[900px] relative flex justify-center"
-            style={{
-              WebkitMaskImage: 'radial-gradient(ellipse at 50% 60%, black 65%, transparent 85%)',
-              maskImage: 'radial-gradient(ellipse at 50% 60%, black 65%, transparent 85%)'
-            }}
-          >
-            <img 
-              src="/computer_desk.png" 
-              alt="3D Computer Desk" 
-              className="w-full object-contain drop-shadow-2xl"
+          {/* Soft themed glow behind the image so it blends on both dark & light backgrounds */}
+          <div className="w-full max-w-[900px] relative flex justify-center">
+            {/* Glow backdrop — purple in dark, soft lavender in light */}
+            <div
+              className="absolute inset-0 rounded-full pointer-events-none"
+              style={{
+                background: 'radial-gradient(ellipse at 50% 60%, var(--bg-secondary) 30%, transparent 75%)',
+                transform: 'scaleX(1.1)',
+                zIndex: 0,
+              }}
             />
+            <div 
+              className="w-full relative"
+              style={{
+                zIndex: 1,
+                WebkitMaskImage: 'radial-gradient(ellipse at 50% 55%, black 55%, transparent 80%)',
+                maskImage: 'radial-gradient(ellipse at 50% 55%, black 55%, transparent 80%)'
+              }}
+            >
+              <img 
+                src="/computer_desk.png" 
+                alt="3D Computer Desk" 
+                className="w-full object-contain drop-shadow-2xl"
+              />
+            </div>
           </div>
         </motion.div>
       </div>

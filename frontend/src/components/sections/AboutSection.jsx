@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Mail, Github, Linkedin, Instagram } from 'lucide-react';
+import { Github, Linkedin } from 'lucide-react';
 
 export default function AboutSection() {
   return (
@@ -51,7 +51,14 @@ export default function AboutSection() {
 
             {/* Email link */}
             <div className="flex items-center gap-2.5 mb-8">
-              <Mail size={20} style={{ color: '#ea4335' }} fill="#ea4335" className="text-white" />
+              {/* Gmail icon */}
+              <svg width="22" height="22" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#EA4335" d="M6 40h6V22L4 16v20c0 2.2 1.8 4 4 4z"/>
+                <path fill="#34A853" d="M36 40h6c2.2 0 4-1.8 4-4V16l-8 6"/>
+                <path fill="#4A90D9" d="M36 8H12L4 16v2l20 14 20-14v-2z"/>
+                <path fill="#FBBC05" d="M4 18v2l20 14 20-14v-2L24 30z"/>
+                <path fill="#EA4335" d="M4 16l8 6 12-8 12 8 8-6-8-6H12z"/>
+              </svg>
               <a
                 href="mailto:wubamlakgirum@gmail.com"
                 className="text-[15.5px] hover:underline transition-colors font-medium"
@@ -105,11 +112,16 @@ export default function AboutSection() {
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-md flex items-center justify-center transition-transform hover:-translate-y-1"
                 style={{
-                  background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
+                  background: 'radial-gradient(circle at 30% 110%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)',
                   color: '#ffffff'
                 }}
               >
-                <Instagram size={20} />
+                {/* Authentic Instagram camera SVG */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <circle cx="17.5" cy="6.5" r="1.5" fill="#ffffff" stroke="none"/>
+                </svg>
               </a>
             </div>
 
