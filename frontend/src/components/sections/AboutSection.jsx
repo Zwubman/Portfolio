@@ -154,6 +154,8 @@ export default function AboutSection() {
                 href="mailto:wubamlakgirum@gmail.com"
                 className="text-[15.5px] hover:underline transition-colors font-medium"
                 style={{ color: 'var(--text-secondary)' }}
+                onMouseEnter={(e) => e.currentTarget.style.color = '#3b82f6'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
               >
                 wubamlakgirum@gmail.com
               </a>

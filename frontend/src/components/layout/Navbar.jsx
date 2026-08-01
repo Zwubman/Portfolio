@@ -54,7 +54,14 @@ export default function Navbar() {
           <Link
             to="/"
             className="flex items-center h-full group"
-            onClick={() => setIsOpen(false)}
+            onClick={(e) => {
+              if (isHome) {
+                e.preventDefault(); // prevent simple reload if already home
+                const el = document.querySelector('#hero');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }
+              setIsOpen(false);
+            }}
           >
             {/* Circular profile thumbnail */}
             <div className="relative w-9 h-9 rounded-full overflow-hidden ring-2 ring-[#7c3aed]/50 group-hover:ring-[#7c3aed] transition-all duration-300 flex-shrink-0 mr-3">
