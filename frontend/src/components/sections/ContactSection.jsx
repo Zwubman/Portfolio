@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useSubmitContactMutation } from '../../store/services/contactApi';
-import { Send, CheckCircle, User, Mail, MessageSquare } from 'lucide-react';
+import { Send, CheckCircle, User, Mail, MessageSquare, Phone, MapPin, Github, Linkedin } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function ContactSection() {
@@ -70,25 +70,86 @@ export default function ContactSection() {
             >
               Let's work together
             </h3>
-            <p className="leading-relaxed mb-6" style={{ color: 'var(--text-secondary)' }}>
-              I'm currently available for freelance work and full-time opportunities. Have a
-              project in mind, or just want to say hi? Drop me a message and I'll get back to
-              you as soon as possible.
+            <p className="leading-relaxed mb-10 text-[15px]" style={{ color: 'var(--text-secondary)' }}>
+              I'm currently available for freelance work and full-time opportunities. I am available 24 hours a day, 7 days a week. Have a project in mind, or just want to say hi? Drop me a message and I'll get back to you as soon as possible.
             </p>
-            <div className="flex items-center gap-3">
+
+            <h3
+              className="text-xs font-bold tracking-[0.2em] uppercase mb-6"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              Contact Info
+            </h3>
+
+            <div className="flex flex-col gap-4">
+              {/* Email Card */}
               <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center"
-                style={{ backgroundColor: 'rgba(124,58,237,0.12)', border: '1px solid var(--border)' }}
+                className="flex items-center gap-5 p-5 rounded-md"
+                style={{ backgroundColor: 'var(--bg-card)', border: '1px solid rgba(124, 58, 237, 0.15)' }}
               >
-                <Mail size={16} style={{ color: 'var(--accent)' }} />
+                <div
+                  className="w-11 h-11 rounded-md flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid rgba(124, 58, 237, 0.25)' }}
+                >
+                  <Mail size={18} style={{ color: 'var(--accent)' }} />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest mb-1" style={{ color: 'var(--text-muted)' }}>
+                    Email
+                  </p>
+                  <a
+                    href="mailto:wubamlakgirum@gmail.com"
+                    className="text-[14.5px] font-medium transition-colors hover:underline"
+                    style={{ color: 'var(--text-secondary)' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#3b82f6')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
+                  >
+                    wubamlakgirum@gmail.com
+                  </a>
+                </div>
               </div>
-              <a
-                href="mailto:wubamlakgirum@gmail.com"
-                className="hover:underline transition-colors text-sm"
-                style={{ color: 'var(--text-secondary)' }}
+
+              {/* Phone Card */}
+              <div
+                className="flex items-center gap-5 p-5 rounded-md"
+                style={{ backgroundColor: 'var(--bg-card)', border: '1px solid rgba(124, 58, 237, 0.15)' }}
               >
-                wubamlakgirum@gmail.com
-              </a>
+                <div
+                  className="w-11 h-11 rounded-md flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid rgba(124, 58, 237, 0.25)' }}
+                >
+                  <Phone size={18} style={{ color: 'var(--accent)' }} />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest mb-1" style={{ color: 'var(--text-muted)' }}>
+                    Phone
+                  </p>
+                  <p className="text-[14.5px] font-medium" style={{ color: 'var(--text-secondary)' }}>
+                    +251 92 123 4567
+                  </p>
+                </div>
+              </div>
+
+              {/* Location Card */}
+              <div
+                className="flex items-center gap-5 p-5 rounded-md"
+                style={{ backgroundColor: 'var(--bg-card)', border: '1px solid rgba(124, 58, 237, 0.15)' }}
+              >
+                <div
+                  className="w-11 h-11 rounded-md flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid rgba(124, 58, 237, 0.25)' }}
+                >
+                  <MapPin size={18} style={{ color: 'var(--accent)' }} />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest mb-1" style={{ color: 'var(--text-muted)' }}>
+                    Location
+                  </p>
+                  <p className="text-[14.5px] font-medium" style={{ color: 'var(--text-secondary)' }}>
+                    Available Worldwide
+                  </p>
+                </div>
+              </div>
             </div>
           </motion.div>
 
