@@ -1,4 +1,5 @@
 const { ContactMessage } = require('../models');
+const nodemailer = require('nodemailer');
 
 // POST /api/contact (Public)
 const submitMessage = async (req, res) => {
@@ -14,6 +15,39 @@ const submitMessage = async (req, res) => {
       sender_email,
       message,
     });
+
+    // Setup Nodemailer transport using your Google App Password from .env
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_APP_PASSWORD,
+      },
+    });
+
+    // Send the email
+    const mailOptions = {
+      from: `"${sender_name}" <${process.env.EMAIL_USER}>`, 
+      replyTo: sender_email,                                
+      to: process.env.EMAIL_RECEIVER,
+      subject: `New Portfolio Message from ${sender_name}`,
+      text: `Name: ${sender_name}\nEmail: ${sender_email}\n\nMessage:\n${message}`,
+      html: `
+        <h3>New Contact Message</h3>
+        <p><strong>Name:</strong> ${sender_name}</p>
+        <p><strong>Email:</strong> ${sender_email}</p>
+        <br/>
+        <p><strong>Message:</strong></p>
+        <p style="white-space: pre-wrap;">${message}</p>
+      `,
+    };
+
+    try {
+      await transporter.sendMail(mailOptions);
+    } catch (mailError) {
+      console.error('Nodemailer error:', mailError);
+      // We logged the error but don't fail the request so the user at least gets their DB save
+    }
 
     res.status(201).json({ message: 'Message sent successfully!', id: contact.id });
   } catch (error) {
