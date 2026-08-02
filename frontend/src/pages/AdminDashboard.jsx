@@ -22,7 +22,8 @@ import {
 import {
   FolderKanban, Briefcase, Mail, LogOut, ArrowLeft, Plus,
   Trash2, Edit, Check, Eye, Trash, ExternalLink, Calendar,
-  MapPin, ToggleLeft, ToggleRight, Sparkles, Send, X, Code2
+  MapPin, ToggleLeft, ToggleRight, Sparkles, Send, X, Code2,
+  FileText, UploadCloud
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -258,64 +259,41 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="bg-[#0E0B24] min-h-screen text-purple-100 selection:bg-purple-500/30 selection:text-white">
-      {/* Top Banner Navigation */}
-      <header className="border-b border-purple-500/10 bg-[#0E0B24]/80 backdrop-blur-xl sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link
-              to="/"
-              className="p-2 rounded-xl bg-purple-500/5 border border-purple-500/10 text-purple-300 hover:text-white hover:bg-purple-500/10 transition-all flex items-center gap-1.5 text-xs font-semibold"
-            >
-              <ArrowLeft size={14} /> Link Back
-            </Link>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-purple-200 to-fuchsia-200 bg-clip-text text-transparent hidden sm:block" style={{ fontFamily: "'Outfit', sans-serif" }}>
-              Administrator Panel
-            </h1>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <span className="text-xs text-purple-300/40 bg-purple-500/5 px-3 py-1.5 border border-purple-500/10 rounded-lg">
-              Signed in: {user?.email}
-            </span>
-            <button
-              onClick={handleLogout}
-              className="p-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:text-white hover:bg-red-500/20 transition-all cursor-pointer"
-              title="Sign Out"
-            >
-              <LogOut size={16} />
-            </button>
-          </div>
+    <div className="bg-[#0E0B24] min-h-screen text-purple-100 flex flex-col md:flex-row selection:bg-purple-500/30 selection:text-white font-sans overflow-hidden">
+      
+      {/* ─── SIDEBAR (Left Edge) ─── */}
+      <aside className="w-full md:w-64 shrink-0 bg-[#0E0B24] border-r border-purple-500/10 md:h-screen flex flex-col">
+        {/* App Title area */}
+        <div className="h-16 flex items-center px-6 border-b border-purple-500/10 shrink-0">
+          <h1 className="text-xl font-bold bg-gradient-to-r from-purple-200 to-fuchsia-200 bg-clip-text text-transparent" style={{ fontFamily: "'Outfit', sans-serif" }}>
+            Admin Panel
+          </h1>
         </div>
-      </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row gap-8">
-        {/* Sidebar Navigation */}
-        <div className="w-full md:w-64 shrink-0 flex flex-col gap-2 md:border-r border-purple-500/10 pr-0 md:pr-6 pb-6 md:pb-0">
-          <h2 className="text-xs font-bold text-purple-300/50 uppercase tracking-widest mb-2 px-2">Menu</h2>
+        {/* Navigation Links */}
+        <nav className="flex-1 px-4 py-6 flex flex-col gap-2 overflow-y-auto">
+          <h2 className="text-[10px] font-bold text-purple-300/40 uppercase tracking-[0.2em] mb-2 px-2">Menu</h2>
           {[
             { id: 'projects', label: 'Projects', icon: FolderKanban },
             { id: 'experiences', label: 'Experience', icon: Briefcase },
             { id: 'messages', label: 'Messages', icon: Mail },
+            { id: 'resume', label: 'Resume / CV', icon: FileText },
           ].map((tab) => {
             const Icon = tab.icon;
-            const count =
-              tab.id === 'messages'
-                ? messages.filter((m) => !m.is_read).length
-                : 0;
+            const count = tab.id === 'messages' ? messages.filter((m) => !m.is_read).length : 0;
 
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center justify-between px-5 py-3 rounded-xl border text-sm font-semibold transition-all duration-300 cursor-pointer ${
+                className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 cursor-pointer ${
                   activeTab === tab.id
-                    ? 'bg-purple-500/10 border-purple-500/30 text-purple-200 shadow-lg shadow-purple-500/5'
-                    : 'bg-transparent border-transparent text-purple-300/50 hover:text-purple-200 hover:bg-purple-500/5'
+                    ? 'bg-purple-500/15 text-purple-100 shadow-[0_0_15px_rgba(124,58,237,0.1)]'
+                    : 'text-purple-300/60 hover:text-purple-200 hover:bg-purple-500/5'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon size={18} />
+                  <Icon size={18} className={activeTab === tab.id ? "text-purple-400" : "text-purple-300/50"} />
                   {tab.label}
                 </div>
                 {count > 0 && (
@@ -326,10 +304,42 @@ export default function AdminDashboard() {
               </button>
             );
           })}
+        </nav>
+        
+        {/* User / Bottom area */}
+        <div className="p-4 border-t border-purple-500/10 shrink-0">
+          <div className="bg-purple-500/5 border border-purple-500/10 rounded-xl p-3 flex items-center justify-between">
+            <div className="overflow-hidden">
+              <p className="text-[10px] text-purple-300/50 font-semibold uppercase tracking-wider mb-0.5">Logged In</p>
+              <p className="text-xs text-purple-200 truncate">{user?.email}</p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-colors cursor-pointer"
+              title="Sign Out"
+            >
+              <LogOut size={14} />
+            </button>
+          </div>
         </div>
+      </aside>
 
-        {/* Main Workspace Content */}
-        <div className="flex-1 min-w-0">
+      {/* ─── MAIN CONTENT AREA ─── */}
+      <main className="flex-1 flex flex-col min-w-0 md:h-screen overflow-hidden bg-[#0A081A]">
+        {/* Top Header */}
+        <header className="h-16 shrink-0 border-b border-purple-500/10 bg-[#0E0B24]/80 backdrop-blur-xl flex items-center justify-between px-8 z-10">
+          <div className="flex items-center gap-4">
+            <Link
+              to="/"
+              className="px-3 py-1.5 rounded-lg bg-purple-500/5 border border-purple-500/10 text-purple-300 hover:text-white hover:bg-purple-500/20 transition-all flex items-center gap-1.5 text-xs font-semibold"
+            >
+              <ArrowLeft size={14} /> View Live Site
+            </Link>
+          </div>
+        </header>
+
+        {/* Scrollable Content Workspace */}
+        <div className="flex-1 overflow-y-auto p-6 lg:p-10">
 
         {/* --- PROJECTS MANAGEMENT TAB --- */}
         {activeTab === 'projects' && (
@@ -570,8 +580,44 @@ export default function AdminDashboard() {
             )}
           </div>
         )}
+
+        {/* --- RESUME/CV MANAGEMENT TAB --- */}
+        {activeTab === 'resume' && (
+          <div>
+            <h2 className="text-xl font-bold text-purple-100 mb-6">Manage Resume / CV</h2>
+            
+            <div className="max-w-2xl bg-purple-500/5 border border-purple-500/15 rounded-2xl p-8 text-center flex flex-col items-center">
+              <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mb-6">
+                <FileText size={32} className="text-purple-400" />
+              </div>
+              
+              <h3 className="text-lg font-bold text-purple-100 mb-2">Upload Profile Resume</h3>
+              <p className="text-sm text-purple-300/60 mb-8 max-w-sm">
+                Upload a PDF of your latest resume. It will be served when users click "Resume" on your landing page.
+              </p>
+              
+              <div className="w-full relative border-2 border-dashed border-purple-500/20 rounded-xl p-8 hover:bg-purple-500/5 transition-colors cursor-pointer group">
+                <input 
+                  type="file" 
+                  accept="application/pdf"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  onChange={(e) => {
+                      if(e.target.files && e.target.files[0]) {
+                        toast('Resume API upload route needed! (For now place file manually in public/Wubamlak_Girum_Resume.pdf)', { icon: '⚠️' })
+                      }
+                  }}
+                />
+                <div className="flex flex-col items-center gap-3 text-purple-300">
+                  <UploadCloud size={28} className="text-purple-400 group-hover:-translate-y-1 transition-transform" />
+                  <span className="text-sm font-semibold">Click to select PDF or drag and drop</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         </div>
-      </div>
+      </main>
 
       {/* --- ADD/EDIT PROJECT MODAL --- */}
       {showProjectModal && (
