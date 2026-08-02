@@ -289,9 +289,10 @@ export default function AdminDashboard() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* Navigation Tabs */}
-        <div className="flex gap-2 border-b border-purple-500/10 pb-4 mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row gap-8">
+        {/* Sidebar Navigation */}
+        <div className="w-full md:w-64 shrink-0 flex flex-col gap-2 md:border-r border-purple-500/10 pr-0 md:pr-6 pb-6 md:pb-0">
+          <h2 className="text-xs font-bold text-purple-300/50 uppercase tracking-widest mb-2 px-2">Menu</h2>
           {[
             { id: 'projects', label: 'Projects', icon: FolderKanban },
             { id: 'experiences', label: 'Experience', icon: Briefcase },
@@ -307,16 +308,18 @@ export default function AdminDashboard() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border text-sm font-semibold transition-all duration-300 cursor-pointer ${
+                className={`flex items-center justify-between px-5 py-3 rounded-xl border text-sm font-semibold transition-all duration-300 cursor-pointer ${
                   activeTab === tab.id
                     ? 'bg-purple-500/10 border-purple-500/30 text-purple-200 shadow-lg shadow-purple-500/5'
                     : 'bg-transparent border-transparent text-purple-300/50 hover:text-purple-200 hover:bg-purple-500/5'
                 }`}
               >
-                <Icon size={16} />
-                {tab.label}
+                <div className="flex items-center gap-3">
+                  <Icon size={18} />
+                  {tab.label}
+                </div>
                 {count > 0 && (
-                  <span className="w-5 h-5 rounded-full bg-fuchsia-600 text-white text-[10px] flex items-center justify-center font-bold">
+                  <span className="w-6 h-6 rounded-full bg-fuchsia-600 text-white text-[11px] flex items-center justify-center font-bold shadow-[0_0_10px_purple]">
                     {count}
                   </span>
                 )}
@@ -324,6 +327,9 @@ export default function AdminDashboard() {
             );
           })}
         </div>
+
+        {/* Main Workspace Content */}
+        <div className="flex-1 min-w-0">
 
         {/* --- PROJECTS MANAGEMENT TAB --- */}
         {activeTab === 'projects' && (
@@ -564,6 +570,7 @@ export default function AdminDashboard() {
             )}
           </div>
         )}
+        </div>
       </div>
 
       {/* --- ADD/EDIT PROJECT MODAL --- */}
