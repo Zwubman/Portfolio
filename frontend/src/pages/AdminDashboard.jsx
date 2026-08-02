@@ -56,6 +56,7 @@ export default function AdminDashboard() {
     title: '',
     description: '',
     image_url: '',
+    imageFile: null,
     tags: '',
     github_url: '',
     live_url: '',
@@ -91,6 +92,7 @@ export default function AdminDashboard() {
       title: '',
       description: '',
       image_url: '',
+      imageFile: null,
       tags: '',
       github_url: '',
       live_url: '',
@@ -106,6 +108,7 @@ export default function AdminDashboard() {
       title: proj.title,
       description: proj.description,
       image_url: proj.image_url || '',
+      imageFile: null,
       tags: (proj.tags || []).join(', '),
       github_url: proj.github_url || '',
       live_url: proj.live_url || '',
@@ -117,21 +120,35 @@ export default function AdminDashboard() {
 
   const saveProject = async (e) => {
     e.preventDefault();
-    const tagArray = projectForm.tags
-      ? projectForm.tags.split(',').map((t) => t.trim()).filter(Boolean)
-      : [];
+    const formData = new FormData();
 
-    const payload = {
-      ...projectForm,
-      tags: tagArray,
-    };
+    formData.append('title', projectForm.title);
+    formData.append('description', projectForm.description);
+    
+    // Convert comma tags to array string
+    const tagArray = projectForm.tags ? projectForm.tags.split(',').map((t) => t.trim()).filter(Boolean) : [];
+    formData.append('tags', JSON.stringify(tagArray));
+    
+    formData.append('github_url', projectForm.github_url || '');
+    formData.append('live_url', projectForm.live_url || '');
+    formData.append('featured', projectForm.featured.toString());
+    
+    if (projectForm.imageFile) {
+      formData.append('image', projectForm.imageFile);
+    } else if (projectForm.image_url) {
+      formData.append('image_url', projectForm.image_url);
+    }
 
     try {
       if (isEditingProject) {
-        await updateProject(payload).unwrap();
+        formData.append('id', projectForm.id); // In case we need it, though ID goes in URL via RTK
+        const uploadPayload = { id: projectForm.id, ...Object.fromEntries(formData) };
+        // Wait, RTK Query body can safely accept formData itself for mutations where body=formData
+        // To correctly route the ID and FormData in RTK: 
+        await updateProject({ id: projectForm.id, body: formData }).unwrap();
         toast.success('Project updated successfully.');
       } else {
-        await createProject(payload).unwrap();
+        await createProject(formData).unwrap();
         toast.success('Project created successfully.');
       }
       setShowProjectModal(false);
@@ -661,27 +678,33 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-purple-300 mb-1.5">Image URL</label>
-                <input
-                  type="url"
-                  value={projectForm.image_url}
-                  onChange={(e) => setProjectForm({ ...projectForm, image_url: e.target.value })}
-                  className="w-full px-3/5 py-2.5 rounded-xl bg-[#0E0B24] border border-purple-500/15 text-purple-100 text-sm focus:outline-none focus:border-purple-500/40"
-                  placeholder="https://images.unsplash.com/..."
-                />
-                {projectForm.image_url && (
-                  <div className="mt-2 text-xs text-purple-300/40 flex items-center gap-1.5">
-                    <span>Link Preview:</span>
-                    <a
-                      href={projectForm.image_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline text-purple-300 hover:text-white"
-                    >
-                      {projectForm.image_url.slice(0, 45)}...
-                    </a>
+                <label className="block text-xs font-semibold text-purple-300 mb-1.5">Cover Image (Upload)</label>
+                <div className="flex flex-col gap-2">
+                  <div className="relative border-2 border-dashed border-purple-500/20 rounded-xl p-4 flex items-center justify-center hover:bg-purple-500/5 transition cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          setProjectForm({ ...projectForm, imageFile: e.target.files[0] });
+                        }
+                      }}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                    <div className="flex gap-2 items-center text-purple-300 text-sm">
+                      <UploadCloud size={18} /> 
+                      {projectForm.imageFile ? projectForm.imageFile.name : 'Click or drop image file here'}
+                    </div>
                   </div>
-                )}
+                  {!projectForm.imageFile && projectForm.image_url && (
+                    <div className="text-xs text-purple-300/40 flex items-center gap-1.5 px-1 truncate">
+                      <span>Current saved image:</span>
+                      <a href={projectForm.image_url} target="_blank" rel="noopener noreferrer" className="underline hover:text-white">
+                        {projectForm.image_url.slice(0, 45)}...
+                      </a>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>

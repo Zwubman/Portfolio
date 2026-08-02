@@ -25,10 +25,25 @@ const getProjectById = async (req, res) => {
 // POST /api/projects (Admin)
 const createProject = async (req, res) => {
   try {
-    const { title, description, image_url, tags, github_url, live_url, featured } = req.body;
+    const { title, description, github_url, live_url } = req.body;
+    let { tags, featured, image_url } = req.body;
 
     if (!title || !description) {
       return res.status(400).json({ message: 'Title and description are required.' });
+    }
+
+    // Since FormData sends text, we might need to parse tags/featured
+    if (typeof tags === 'string') {
+      try { tags = JSON.parse(tags); } catch (e) { tags = tags.split(',').map(t => t.trim()); }
+    }
+    if (typeof featured === 'string') {
+      featured = (featured === 'true');
+    }
+
+    // Handle Uploaded File
+    let finalImageUrl = image_url || '';
+    if (req.file) {
+      finalImageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     }
 
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -37,7 +52,7 @@ const createProject = async (req, res) => {
       title,
       slug,
       description,
-      image_url,
+      image_url: finalImageUrl,
       tags: tags || [],
       github_url,
       live_url,
@@ -57,17 +72,33 @@ const updateProject = async (req, res) => {
     const project = await Project.findByPk(req.params.id);
     if (!project) return res.status(404).json({ message: 'Project not found.' });
 
-    const { title, description, image_url, tags, github_url, live_url, featured } = req.body;
+    const { title, description, github_url, live_url } = req.body;
+    let { tags, featured, image_url } = req.body;
 
     if (title) {
       project.slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    }
+
+    // Parse tag/featured string from FormData
+    if (typeof tags === 'string') {
+      try { tags = JSON.parse(tags); } catch (e) { tags = tags.split(',').map(t => t.trim()); }
+    }
+    if (typeof featured === 'string') {
+      featured = (featured === 'true');
+    }
+
+    let finalImageUrl = image_url !== undefined ? image_url : project.image_url;
+    
+    if (req.file) {
+      // Dynamic absolute URL based on host
+      finalImageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     }
 
     await project.update({
       title: title || project.title,
       slug: project.slug,
       description: description || project.description,
-      image_url: image_url !== undefined ? image_url : project.image_url,
+      image_url: finalImageUrl,
       tags: tags || project.tags,
       github_url: github_url !== undefined ? github_url : project.github_url,
       live_url: live_url !== undefined ? live_url : project.live_url,
