@@ -6,6 +6,7 @@ const mockExperiencesFallback = [
     id: 'me1',
     company: 'Askuala / Freelance',
     role: 'Full Stack Developer',
+    job_type: 'Full-time',
     location_type: 'Remote',
     start_date: '2023-07-01',
     end_date: null, // Present
@@ -24,6 +25,7 @@ const mockExperiencesFallback = [
     id: 'me2',
     company: 'Askuala Link',
     role: 'Backend Developer',
+    job_type: 'Full-time',
     location_type: 'Remote',
     start_date: '2024-12-01',
     end_date: null, // Present
@@ -172,12 +174,11 @@ export default function ExperienceSection() {
                         isLeft ? 'items-start pl-8' : 'items-end pr-8'
                       } justify-center`}
                     >
-                      {(exp.job_type || exp.location_type) && (
-                        <span className="text-sm font-medium whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
-                          {[exp.job_type, exp.location_type].filter(Boolean).join(' | ')}
-                        </span>
-                      )}
-                      <span className="text-sm font-medium whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
+                      {/* Clear, capitalized, bold Title style for: Job Type | Location */}
+                      <span className="text-[17px] font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-fuchsia-200" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                        {((exp.job_type || 'Full-time').charAt(0).toUpperCase() + (exp.job_type || 'Full-time').slice(1))} | {((exp.location_type || 'Remote').charAt(0).toUpperCase() + (exp.location_type || 'Remote').slice(1))}
+                      </span>
+                      <span className="text-xs font-semibold tracking-wider mt-0.5" style={{ color: 'var(--text-muted)' }}>
                         {formatDate(exp.start_date)} — {formatDate(exp.end_date)}
                       </span>
                     </motion.div>
