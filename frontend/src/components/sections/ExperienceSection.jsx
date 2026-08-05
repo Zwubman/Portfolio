@@ -138,29 +138,10 @@ export default function ExperienceSection() {
                           {exp.role}
                         </h3>
                         {exp.company && (
-                          <h4 className="text-[15px] font-medium mb-2" style={{ color: 'var(--text-muted)' }}>
+                          <h4 className="text-[15px] font-medium mb-5" style={{ color: 'var(--text-muted)' }}>
                             {exp.company}
                           </h4>
                         )}
-                        {/* Job Type + Location badges */}
-                        <div className="flex items-center gap-2 flex-wrap mb-5">
-                          {exp.job_type && (
-                            <span
-                              className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full"
-                              style={{ backgroundColor: 'rgba(124,58,237,0.12)', color: 'var(--accent)', border: '1px solid rgba(124,58,237,0.25)' }}
-                            >
-                              {exp.job_type}
-                            </span>
-                          )}
-                          {exp.location_type && (
-                            <span
-                              className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full"
-                              style={{ backgroundColor: 'rgba(124,58,237,0.06)', color: 'var(--text-muted)', border: '1px solid rgba(124,58,237,0.15)' }}
-                            >
-                              {exp.location_type}
-                            </span>
-                          )}
-                        </div>
                         {!exp.company && <div className="mb-5" />}
 
                         <ul className="space-y-3">
@@ -181,16 +162,21 @@ export default function ExperienceSection() {
                       </div>
                     </motion.div>
 
-                    {/* Date label */}
+                    {/* Date + Job Type + Location column */}
                     <motion.div
                       initial={{ opacity: 0, x: isLeft ? 20 : -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.6, delay: 0.2 }}
-                      className={`hidden lg:flex w-[45%] ${
-                        isLeft ? 'justify-start pl-8' : 'justify-end pr-8'
-                      } items-center`}
+                      className={`hidden lg:flex flex-col w-[45%] gap-1 ${
+                        isLeft ? 'items-start pl-8' : 'items-end pr-8'
+                      } justify-center`}
                     >
+                      {(exp.job_type || exp.location_type) && (
+                        <span className="text-sm font-medium whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
+                          {[exp.job_type, exp.location_type].filter(Boolean).join(' | ')}
+                        </span>
+                      )}
                       <span className="text-sm font-medium whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
                         {formatDate(exp.start_date)} — {formatDate(exp.end_date)}
                       </span>
