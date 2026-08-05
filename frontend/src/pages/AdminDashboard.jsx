@@ -486,14 +486,19 @@ export default function AdminDashboard() {
                     className="p-5 rounded-2xl border border-purple-500/10 bg-purple-500/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
                   >
                     <div>
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <h3 className="font-bold text-purple-100">{exp.company}</h3>
+                      {/* Line 1: Job Title / Role */}
+                      <h3 className="font-bold text-purple-100 text-base mb-0.5">{exp.role}</h3>
+
+                      {/* Line 2: Company Name + index badge */}
+                      <div className="flex items-center gap-2 mb-1">
+                        <p className="text-purple-300/80 text-sm font-medium">{exp.company}</p>
                         <span className="text-[10px] text-purple-300/40 bg-purple-500/5 px-2 py-0.5 border border-purple-500/10 rounded-full">
                           Index: {exp.order_index}
                         </span>
                       </div>
-                      <p className="text-purple-200 text-sm font-semibold">{exp.role}</p>
-                      <div className="flex items-center gap-2 text-xs text-purple-300/40 mt-1 flex-wrap">
+
+                      {/* Line 3: Job Type + Location + Date */}
+                      <div className="flex items-center gap-2 text-xs text-purple-300/40 flex-wrap">
                         <span className="bg-purple-500/10 border border-purple-500/15 px-2 py-0.5 rounded-full">{exp.job_type || 'Full-time'}</span>
                         <span>·</span>
                         <span>{exp.location_type}</span>

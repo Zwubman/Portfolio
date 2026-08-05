@@ -137,12 +137,30 @@ export default function ExperienceSection() {
                         <h3 className="text-2xl font-bold mb-1 leading-tight" style={{ color: 'var(--text-primary)' }}>
                           {exp.role}
                         </h3>
-                        {/* Only show company if it exists. Note: Screenshot shows "Askuala Link" for the backend dev, but none for the first one */}
                         {exp.company && (
-                          <h4 className="text-[15px] font-medium mb-5" style={{ color: 'var(--text-muted)' }}>
+                          <h4 className="text-[15px] font-medium mb-2" style={{ color: 'var(--text-muted)' }}>
                             {exp.company}
                           </h4>
                         )}
+                        {/* Job Type + Location badges */}
+                        <div className="flex items-center gap-2 flex-wrap mb-5">
+                          {exp.job_type && (
+                            <span
+                              className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full"
+                              style={{ backgroundColor: 'rgba(124,58,237,0.12)', color: 'var(--accent)', border: '1px solid rgba(124,58,237,0.25)' }}
+                            >
+                              {exp.job_type}
+                            </span>
+                          )}
+                          {exp.location_type && (
+                            <span
+                              className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full"
+                              style={{ backgroundColor: 'rgba(124,58,237,0.06)', color: 'var(--text-muted)', border: '1px solid rgba(124,58,237,0.15)' }}
+                            >
+                              {exp.location_type}
+                            </span>
+                          )}
+                        </div>
                         {!exp.company && <div className="mb-5" />}
 
                         <ul className="space-y-3">
