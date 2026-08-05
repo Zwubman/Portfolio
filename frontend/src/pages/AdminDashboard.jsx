@@ -70,6 +70,7 @@ export default function AdminDashboard() {
     id: null,
     company: '',
     role: '',
+    job_type: 'Full-time',
     location_type: 'Remote',
     start_date: '',
     end_date: '',
@@ -174,6 +175,7 @@ export default function AdminDashboard() {
       id: null,
       company: '',
       role: '',
+      job_type: 'Full-time',
       location_type: 'Remote',
       start_date: '',
       end_date: '',
@@ -189,6 +191,7 @@ export default function AdminDashboard() {
       id: exp.id,
       company: exp.company,
       role: exp.role,
+      job_type: exp.job_type || 'Full-time',
       location_type: exp.location_type || 'Remote',
       start_date: exp.start_date || '',
       end_date: exp.end_date || '',
@@ -483,19 +486,19 @@ export default function AdminDashboard() {
                     className="p-5 rounded-2xl border border-purple-500/10 bg-purple-500/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
                   >
                     <div>
-                      <div className="flex items-center gap-2 mb-1.5">
+                      <div className="flex items-center gap-2 mb-0.5">
                         <h3 className="font-bold text-purple-100">{exp.company}</h3>
                         <span className="text-[10px] text-purple-300/40 bg-purple-500/5 px-2 py-0.5 border border-purple-500/10 rounded-full">
                           Index: {exp.order_index}
                         </span>
                       </div>
-                      <p className="text-purple-300/70 text-sm">{exp.role}</p>
-                      <div className="flex items-center gap-3 text-xs text-purple-300/30 mt-1">
+                      <p className="text-purple-200 text-sm font-semibold">{exp.role}</p>
+                      <div className="flex items-center gap-2 text-xs text-purple-300/40 mt-1 flex-wrap">
+                        <span className="bg-purple-500/10 border border-purple-500/15 px-2 py-0.5 rounded-full">{exp.job_type || 'Full-time'}</span>
+                        <span>·</span>
                         <span>{exp.location_type}</span>
-                        <span>•</span>
-                        <span>
-                          {exp.start_date} — {exp.end_date || 'Present'}
-                        </span>
+                        <span>·</span>
+                        <span>{exp.start_date} — {exp.end_date || 'Present'}</span>
                       </div>
                     </div>
 
@@ -771,7 +774,7 @@ export default function AdminDashboard() {
                   type="submit"
                   className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white text-sm font-semibold hover:opacity-90 cursor-pointer"
                 >
-                  Save Changes
+                  {isEditingProject ? 'Save Changes' : 'Add Project'}
                 </button>
               </div>
             </form>
@@ -823,25 +826,30 @@ export default function AdminDashboard() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
+                  <label className="block text-xs font-semibold text-purple-300 mb-1.5">Job Type</label>
+                  <select
+                    value={experienceForm.job_type}
+                    onChange={(e) => setExperienceForm({ ...experienceForm, job_type: e.target.value })}
+                    className="w-full px-3 py-2.5 rounded-xl bg-[#0E0B24] border border-purple-500/15 text-purple-100 text-sm focus:outline-none"
+                  >
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Contract">Contract</option>
+                    <option value="Internship">Internship</option>
+                    <option value="Freelance">Freelance</option>
+                  </select>
+                </div>
+                <div>
                   <label className="block text-xs font-semibold text-purple-300 mb-1.5">Location Type</label>
                   <select
                     value={experienceForm.location_type}
                     onChange={(e) => setExperienceForm({ ...experienceForm, location_type: e.target.value })}
-                    className="w-full px-3/5 py-2.5 rounded-xl bg-[#0E0B24] border border-purple-500/15 text-purple-100 text-sm focus:outline-none"
+                    className="w-full px-3 py-2.5 rounded-xl bg-[#0E0B24] border border-purple-500/15 text-purple-100 text-sm focus:outline-none"
                   >
                     <option value="Remote">Remote</option>
                     <option value="Onsite">Onsite</option>
                     <option value="Hybrid">Hybrid</option>
                   </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-purple-300 mb-1.5">Order index (Sorting)</label>
-                  <input
-                    type="number"
-                    value={experienceForm.order_index}
-                    onChange={(e) => setExperienceForm({ ...experienceForm, order_index: parseInt(e.target.value || 0) })}
-                    className="w-full px-3/5 py-2.5 rounded-xl bg-[#0E0B24] border border-purple-500/15 text-purple-100 text-sm focus:outline-none"
-                  />
                 </div>
               </div>
 
@@ -914,7 +922,7 @@ export default function AdminDashboard() {
                   type="submit"
                   className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white text-sm font-semibold hover:opacity-90 cursor-pointer"
                 >
-                  Save Entry
+                  {isEditingExperience ? 'Save Changes' : 'Add Entry'}
                 </button>
               </div>
             </form>

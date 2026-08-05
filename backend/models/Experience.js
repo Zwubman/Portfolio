@@ -15,6 +15,10 @@ const Experience = sequelize.define('Experience', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  job_type: {
+    type: DataTypes.ENUM('Full-time', 'Part-time', 'Contract', 'Internship', 'Freelance'),
+    defaultValue: 'Full-time',
+  },
   location_type: {
     type: DataTypes.ENUM('Remote', 'Onsite', 'Hybrid'),
     defaultValue: 'Remote',

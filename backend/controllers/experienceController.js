@@ -14,7 +14,7 @@ const getExperiences = async (req, res) => {
 // POST /api/experiences (Admin)
 const createExperience = async (req, res) => {
   try {
-    const { company, role, location_type, start_date, end_date, bullet_points, order_index } = req.body;
+    const { company, role, job_type, location_type, start_date, end_date, bullet_points, order_index } = req.body;
 
     if (!company || !role || !start_date) {
       return res.status(400).json({ message: 'Company, role, and start date are required.' });
@@ -23,6 +23,7 @@ const createExperience = async (req, res) => {
     const experience = await Experience.create({
       company,
       role,
+      job_type: job_type || 'Full-time',
       location_type: location_type || 'Remote',
       start_date,
       end_date,
@@ -43,11 +44,12 @@ const updateExperience = async (req, res) => {
     const experience = await Experience.findByPk(req.params.id);
     if (!experience) return res.status(404).json({ message: 'Experience not found.' });
 
-    const { company, role, location_type, start_date, end_date, bullet_points, order_index } = req.body;
+    const { company, role, job_type, location_type, start_date, end_date, bullet_points, order_index } = req.body;
 
     await experience.update({
       company: company || experience.company,
       role: role || experience.role,
+      job_type: job_type || experience.job_type,
       location_type: location_type || experience.location_type,
       start_date: start_date || experience.start_date,
       end_date: end_date !== undefined ? end_date : experience.end_date,
