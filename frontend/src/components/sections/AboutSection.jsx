@@ -221,19 +221,16 @@ export default function AboutSection() {
               </a>
             </div>
 
-            {/* Resume Button */}
-            <div className="relative z-30">
-              {resumeUrl && (
-                <a
-                  href={resumeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-7 py-2.5 rounded-md text-white font-medium text-[15px] transition-all hover:opacity-90 flex-shrink-0"
-                  style={{ backgroundColor: '#915eff' }}
-                >
-                  Resume
-                </a>
-              )}
+            <div className="relative z-30 mt-6">
+              <a
+                href={resumeUrl || "/Wubamlak_Girum_Resume.pdf"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-7 py-2.5 rounded-md text-white font-medium text-[15px] transition-all hover:opacity-90 flex-shrink-0 shadow-lg shadow-purple-500/20"
+                style={{ backgroundColor: '#915eff' }}
+              >
+                Resume
+              </a>
             </div>
           </motion.div>
 
