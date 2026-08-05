@@ -11,6 +11,7 @@ const projectRoutes = require('./routes/projectRoutes');
 const experienceRoutes = require('./routes/experienceRoutes');
 const skillRoutes = require('./routes/skillRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const resumeRoutes = require('./routes/resumeRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -49,6 +50,7 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/experiences', experienceRoutes);
 app.use('/api/skills', skillRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/resume', resumeRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

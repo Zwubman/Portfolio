@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Github, Linkedin } from 'lucide-react';
+import { useGetResumeQuery } from '../../store/services/resumeApi';
 
 /* ── Specialty role cards ── */
 const specialtyCards = [
@@ -93,6 +94,8 @@ const specialtyCards = [
 ];
 
 export default function AboutSection() {
+  const { data: resumeData } = useGetResumeQuery();
+  const resumeUrl = resumeData?.resume_url || null;
   return (
     <section
       id="about"
@@ -220,15 +223,17 @@ export default function AboutSection() {
 
             {/* Resume Button */}
             <div className="relative z-30">
-              <a
-                href="/Wubamlak_Girum_Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-7 py-2.5 rounded-md text-white font-medium text-[15px] transition-all hover:opacity-90 flex-shrink-0"
-                style={{ backgroundColor: '#915eff' }}
-              >
-                Resume
-              </a>
+              {resumeUrl && (
+                <a
+                  href={resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-7 py-2.5 rounded-md text-white font-medium text-[15px] transition-all hover:opacity-90 flex-shrink-0"
+                  style={{ backgroundColor: '#915eff' }}
+                >
+                  Resume
+                </a>
+              )}
             </div>
           </motion.div>
 

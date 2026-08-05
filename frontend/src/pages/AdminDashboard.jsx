@@ -20,12 +20,131 @@ import {
   useDeleteMessageMutation,
 } from '../store/services/contactApi';
 import {
+  useGetResumeQuery,
+  useUploadResumeMutation,
+  useDeleteResumeMutation,
+} from '../store/services/resumeApi';
+import {
   FolderKanban, Briefcase, Mail, LogOut, ArrowLeft, Plus,
   Trash2, Edit, Check, Eye, Trash, ExternalLink, Calendar,
   MapPin, ToggleLeft, ToggleRight, Sparkles, Send, X, Code2,
-  FileText, UploadCloud
+  FileText, UploadCloud, Download, RefreshCw
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+
+// ─── Resume/CV Management Sub-Component ───────────────────────────────────────
+function ResumeTab() {
+  const { data, isLoading, refetch } = useGetResumeQuery();
+  const [uploadResume, { isLoading: uploading }] = useUploadResumeMutation();
+  const [deleteResume, { isLoading: deleting }] = useDeleteResumeMutation();
+  const resumeUrl = data?.resume_url || null;
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== 'application/pdf') {
+      toast.error('Only PDF files are allowed.');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('resume', file);
+    try {
+      const result = await uploadResume(formData).unwrap();
+      toast.success('Resume uploaded successfully!');
+    } catch (err) {
+      toast.error(err?.data?.message || 'Upload failed.');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm('Delete your current resume?')) return;
+    try {
+      await deleteResume().unwrap();
+      toast.success('Resume deleted.');
+    } catch (err) {
+      toast.error('Failed to delete resume.');
+    }
+  };
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold text-purple-100">Manage Resume / CV</h2>
+        <button
+          onClick={refetch}
+          className="p-2 rounded-xl border border-purple-500/10 text-purple-300 hover:bg-white/5 cursor-pointer"
+          title="Refresh"
+        >
+          <RefreshCw size={15} />
+        </button>
+      </div>
+
+      {isLoading ? (
+        <div className="flex justify-center p-12">
+          <div className="w-8 h-8 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+        </div>
+      ) : (
+        <div className="max-w-2xl space-y-6">
+
+          {/* Current resume preview */}
+          {resumeUrl ? (
+            <div className="p-6 rounded-2xl bg-purple-500/5 border border-purple-500/15 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center flex-shrink-0">
+                  <FileText size={24} className="text-purple-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-purple-100 mb-0.5">resume.pdf</p>
+                  <p className="text-xs text-purple-300/50 font-mono break-all">{resumeUrl}</p>
+                </div>
+              </div>
+              <div className="flex gap-2 flex-shrink-0">
+                <a
+                  href={resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 rounded-lg border border-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-500/10 text-xs flex items-center gap-1.5"
+                >
+                  <Download size={13} /> View
+                </a>
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="px-3 py-1.5 rounded-lg border border-red-500/15 text-red-400 hover:bg-red-500/10 text-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                >
+                  <Trash size={13} /> {deleting ? 'Deleting…' : 'Delete'}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="p-5 rounded-2xl bg-purple-500/5 border border-dashed border-purple-500/20 text-center">
+              <p className="text-purple-300/40 text-sm">No resume uploaded yet.</p>
+            </div>
+          )}
+
+          {/* Upload zone */}
+          <div className="relative border-2 border-dashed border-purple-500/20 rounded-2xl p-10 text-center hover:bg-purple-500/5 transition-colors cursor-pointer group">
+            <input
+              type="file"
+              accept="application/pdf"
+              disabled={uploading}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+              onChange={handleFileChange}
+            />
+            <div className="flex flex-col items-center gap-3 text-purple-300 pointer-events-none">
+              <UploadCloud size={32} className="text-purple-400 group-hover:-translate-y-1 transition-transform" />
+              <p className="text-sm font-semibold">
+                {uploading ? 'Uploading PDF…' : resumeUrl ? 'Click to replace current resume PDF' : 'Click to upload your Resume PDF'}
+              </p>
+              <p className="text-xs text-purple-300/40">PDF only · Max 10 MB</p>
+            </div>
+          </div>
+
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('projects');
@@ -608,37 +727,7 @@ export default function AdminDashboard() {
 
         {/* --- RESUME/CV MANAGEMENT TAB --- */}
         {activeTab === 'resume' && (
-          <div>
-            <h2 className="text-xl font-bold text-purple-100 mb-6">Manage Resume / CV</h2>
-            
-            <div className="max-w-2xl bg-purple-500/5 border border-purple-500/15 rounded-2xl p-8 text-center flex flex-col items-center">
-              <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mb-6">
-                <FileText size={32} className="text-purple-400" />
-              </div>
-              
-              <h3 className="text-lg font-bold text-purple-100 mb-2">Upload Profile Resume</h3>
-              <p className="text-sm text-purple-300/60 mb-8 max-w-sm">
-                Upload a PDF of your latest resume. It will be served when users click "Resume" on your landing page.
-              </p>
-              
-              <div className="w-full relative border-2 border-dashed border-purple-500/20 rounded-xl p-8 hover:bg-purple-500/5 transition-colors cursor-pointer group">
-                <input 
-                  type="file" 
-                  accept="application/pdf"
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                  onChange={(e) => {
-                      if(e.target.files && e.target.files[0]) {
-                        toast('Resume API upload route needed! (For now place file manually in public/Wubamlak_Girum_Resume.pdf)', { icon: '⚠️' })
-                      }
-                  }}
-                />
-                <div className="flex flex-col items-center gap-3 text-purple-300">
-                  <UploadCloud size={28} className="text-purple-400 group-hover:-translate-y-1 transition-transform" />
-                  <span className="text-sm font-semibold">Click to select PDF or drag and drop</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ResumeTab />
         )}
 
         </div>
