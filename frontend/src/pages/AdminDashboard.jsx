@@ -173,7 +173,9 @@ export default function AdminDashboard() {
   const [projectForm, setProjectForm] = useState({
     id: null,
     title: '',
+    summary: '',
     description: '',
+    features: '',
     image_url: '',
     imageFile: null,
     tags: '',
@@ -210,7 +212,9 @@ export default function AdminDashboard() {
     setProjectForm({
       id: null,
       title: '',
+      summary: '',
       description: '',
+      features: '',
       image_url: '',
       imageFile: null,
       tags: '',
@@ -226,7 +230,9 @@ export default function AdminDashboard() {
     setProjectForm({
       id: proj.id,
       title: proj.title,
-      description: proj.description,
+      summary: proj.summary || '',
+      description: proj.description || '',
+      features: Array.isArray(proj.features) ? proj.features.join('\n') : '',
       image_url: proj.image_url || '',
       imageFile: null,
       tags: (proj.tags || []).join(', '),
@@ -243,7 +249,12 @@ export default function AdminDashboard() {
     const formData = new FormData();
 
     formData.append('title', projectForm.title);
+    formData.append('summary', projectForm.summary);
     formData.append('description', projectForm.description);
+    
+    // Convert newline features to array string
+    const featureArray = projectForm.features ? projectForm.features.split('\n').map((f) => f.trim()).filter(Boolean) : [];
+    formData.append('features', JSON.stringify(featureArray));
     
     // Convert comma tags to array string
     const tagArray = projectForm.tags ? projectForm.tags.split(',').map((t) => t.trim()).filter(Boolean) : [];
@@ -763,14 +774,36 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-purple-300 mb-1.5">Description</label>
+                <label className="block text-xs font-semibold text-purple-300 mb-1.5">Project Summary</label>
                 <textarea
                   required
-                  rows={3}
+                  rows={2}
+                  value={projectForm.summary}
+                  onChange={(e) => setProjectForm({ ...projectForm, summary: e.target.value })}
+                  className="w-full px-3 py-2.5 rounded-xl bg-[#0E0B24] border border-purple-500/15 text-purple-100 text-sm focus:outline-none focus:border-purple-500/40 resize-none"
+                  placeholder="A short punchy summary for the homepage card..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-purple-300 mb-1.5">Full Description</label>
+                <textarea
+                  rows={4}
                   value={projectForm.description}
                   onChange={(e) => setProjectForm({ ...projectForm, description: e.target.value })}
-                  className="w-full px-3/5 py-2.5 rounded-xl bg-[#0E0B24] border border-purple-500/15 text-purple-100 text-sm focus:outline-none focus:border-purple-500/40 resize-none"
+                  className="w-full px-3 py-2.5 rounded-xl bg-[#0E0B24] border border-purple-500/15 text-purple-100 text-sm focus:outline-none focus:border-purple-500/40 resize-none"
                   placeholder="Detail the stack, architecture, metrics..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-purple-300 mb-1.5">Key Features (One per line)</label>
+                <textarea
+                  rows={4}
+                  value={projectForm.features}
+                  onChange={(e) => setProjectForm({ ...projectForm, features: e.target.value })}
+                  className="w-full px-3 py-2.5 rounded-xl bg-[#0E0B24] border border-purple-500/15 text-purple-100 text-sm focus:outline-none focus:border-purple-500/40 resize-none whitespace-pre-wrap"
+                  placeholder="Role-Based Access Control&#10;Real-time WebSocket chat&#10;Stripe Payment Gateway..."
                 />
               </div>
 

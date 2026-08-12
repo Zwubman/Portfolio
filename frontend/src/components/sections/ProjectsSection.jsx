@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useGetProjectsQuery } from '../../store/services/projectsApi';
-import { ExternalLink, Github, X, Eye, Star } from 'lucide-react';
+import { ExternalLink, Github, Eye, Star } from 'lucide-react';
 
 const mockProjectsFallback = [
   {
@@ -119,7 +119,6 @@ export default function ProjectsSection() {
   const { data: serverProjects = [], isLoading } = useGetProjectsQuery();
   const projects =
     serverProjects && serverProjects.length > 0 ? serverProjects : mockProjectsFallback;
-  const [selectedProject, setSelectedProject] = useState(null);
 
   return (
     <section
@@ -201,13 +200,13 @@ export default function ProjectsSection() {
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-sm"
                     style={{ backgroundColor: 'rgba(5, 8, 22, 0.65)' }}
                   >
-                    <button
-                      onClick={() => setSelectedProject(project)}
-                      className="p-2.5 rounded-xl transition-all cursor-pointer"
+                    <Link
+                      to={`/projects/${project.id}`}
+                      className="p-2.5 rounded-xl transition-all cursor-pointer flex items-center justify-center"
                       style={{ backgroundColor: '#7c3aed', color: '#fff' }}
                     >
                       <Eye size={18} />
-                    </button>
+                    </Link>
                     {project.github_url && (
                       <a
                         href={project.github_url}
@@ -249,7 +248,7 @@ export default function ProjectsSection() {
                     {project.title}
                   </h3>
                   <p className="text-sm line-clamp-2 mb-4 leading-relaxed transition-colors" style={{ color: 'var(--text-secondary)' }}>
-                    {project.description}
+                    {project.summary || project.description}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {(project.tags || []).slice(0, 4).map((tag) => {
@@ -275,107 +274,6 @@ export default function ProjectsSection() {
           </div>
         )}
       </div>
-
-      {/* Lightbox Modal */}
-      <AnimatePresence>
-        {selectedProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-xl"
-            style={{ backgroundColor: 'rgba(5, 8, 22, 0.85)' }}
-            onClick={() => setSelectedProject(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl"
-              style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border)' }}
-            >
-              {selectedProject.image_url && (
-                <img
-                  src={selectedProject.image_url}
-                  alt={selectedProject.title}
-                  className="w-full h-56 object-cover"
-                />
-              )}
-
-              <div className="p-6 sm:p-8">
-                <div className="flex items-start justify-between mb-4">
-                  <h3
-                    className="text-2xl font-bold"
-                    style={{ color: 'var(--text-primary)', fontFamily: "'Poppins', sans-serif" }}
-                  >
-                    {selectedProject.title}
-                  </h3>
-                  <button
-                    onClick={() => setSelectedProject(null)}
-                    className="p-1.5 rounded-lg transition-all cursor-pointer"
-                    style={{ color: 'var(--text-secondary)' }}
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-
-                <p className="leading-relaxed mb-6" style={{ color: 'var(--text-secondary)' }}>
-                  {selectedProject.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {(selectedProject.tags || []).map((tag) => {
-                    const s = getTagStyle(tag);
-                    return (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 text-xs font-medium rounded-full"
-                        style={{
-                          backgroundColor: s.bg,
-                          border: `1px solid ${s.border}`,
-                          color: s.color,
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    );
-                  })}
-                </div>
-
-                <div className="flex gap-3">
-                  {selectedProject.github_url && (
-                    <a
-                      href={selectedProject.github_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl border text-sm font-medium transition-all"
-                      style={{
-                        borderColor: 'var(--accent)',
-                        color: 'var(--text-primary)',
-                        backgroundColor: 'transparent',
-                      }}
-                    >
-                      <Github size={16} /> GitHub
-                    </a>
-                  )}
-                  {selectedProject.live_url && (
-                    <a
-                      href={selectedProject.live_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-medium hover:opacity-90 transition-all"
-                      style={{ background: 'linear-gradient(to right, #7c3aed, #a21caf)' }}
-                    >
-                      <ExternalLink size={16} /> Live Demo
-                    </a>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

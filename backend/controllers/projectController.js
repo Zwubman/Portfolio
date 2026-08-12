@@ -25,16 +25,19 @@ const getProjectById = async (req, res) => {
 // POST /api/projects (Admin)
 const createProject = async (req, res) => {
   try {
-    const { title, description, github_url, live_url } = req.body;
-    let { tags, featured, image_url } = req.body;
+    const { title, description, summary, github_url, live_url } = req.body;
+    let { tags, featured, image_url, features } = req.body;
 
-    if (!title || !description) {
-      return res.status(400).json({ message: 'Title and description are required.' });
+    if (!title) {
+      return res.status(400).json({ message: 'Title is required.' });
     }
 
     // Since FormData sends text, we might need to parse tags/featured
     if (typeof tags === 'string') {
       try { tags = JSON.parse(tags); } catch (e) { tags = tags.split(',').map(t => t.trim()); }
+    }
+    if (typeof features === 'string') {
+      try { features = JSON.parse(features); } catch (e) { features = []; }
     }
     if (typeof featured === 'string') {
       featured = (featured === 'true');
@@ -51,7 +54,9 @@ const createProject = async (req, res) => {
     const project = await Project.create({
       title,
       slug,
-      description,
+      description: description || '',
+      summary: summary || '',
+      features: features || [],
       image_url: finalImageUrl,
       tags: tags || [],
       github_url,
@@ -72,16 +77,19 @@ const updateProject = async (req, res) => {
     const project = await Project.findByPk(req.params.id);
     if (!project) return res.status(404).json({ message: 'Project not found.' });
 
-    const { title, description, github_url, live_url } = req.body;
-    let { tags, featured, image_url } = req.body;
+    const { title, description, summary, github_url, live_url } = req.body;
+    let { tags, featured, image_url, features } = req.body;
 
     if (title) {
       project.slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     }
 
-    // Parse tag/featured string from FormData
+    // Parse tag/featured/features string from FormData
     if (typeof tags === 'string') {
       try { tags = JSON.parse(tags); } catch (e) { tags = tags.split(',').map(t => t.trim()); }
+    }
+    if (typeof features === 'string') {
+      try { features = JSON.parse(features); } catch (e) { features = []; }
     }
     if (typeof featured === 'string') {
       featured = (featured === 'true');
@@ -97,7 +105,9 @@ const updateProject = async (req, res) => {
     await project.update({
       title: title || project.title,
       slug: project.slug,
-      description: description || project.description,
+      description: description !== undefined ? description : project.description,
+      summary: summary !== undefined ? summary : project.summary,
+      features: features !== undefined ? features : project.features,
       image_url: finalImageUrl,
       tags: tags || project.tags,
       github_url: github_url !== undefined ? github_url : project.github_url,

@@ -18,7 +18,15 @@ const Project = sequelize.define('Project', {
   },
   description: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
+  },
+  summary: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  features: {
+    type: DataTypes.JSONB,
+    defaultValue: [],
   },
   image_url: {
     type: DataTypes.STRING,
