@@ -70,7 +70,7 @@ export default function ContactSection() {
             >
               Let's work together
             </h3>
-            <p className="leading-relaxed mb-10 text-[15px]" style={{ color: 'var(--text-secondary)' }}>
+            <p className="leading-relaxed mb-10 text-[15px] text-justify" style={{ color: 'var(--text-secondary)' }}>
               I'm currently available for freelance work and full-time opportunities. I am available 24 hours a day, 7 days a week. Have a project in mind, or just want to say hi? Send me a message and I'll get back to you as soon as possible.
             </p>
 
