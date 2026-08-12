@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGetProjectsQuery } from '../../store/services/projectsApi';
-import { ExternalLink, Github, X, Eye } from 'lucide-react';
+import { ExternalLink, Github, X, Eye, Star } from 'lucide-react';
 
 const mockProjectsFallback = [
   {
@@ -234,8 +234,8 @@ export default function ProjectsSection() {
 
                   {/* Featured badge */}
                   {project.featured && (
-                    <div className="absolute top-3 right-3 px-2.5 py-1 text-xs font-semibold text-[#fbbf24] bg-[#fbbf24]/15 border border-[#fbbf24]/30 rounded-full backdrop-blur-md">
-                      Featured
+                    <div className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-[#fbbf24]/15 border border-[#fbbf24]/40 rounded-full backdrop-blur-md shadow-lg shadow-amber-500/20">
+                      <Star size={14} className="text-[#fbbf24]" fill="#fbbf24" />
                     </div>
                   )}
                 </div>
