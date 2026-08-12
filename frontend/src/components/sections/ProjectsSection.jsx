@@ -151,7 +151,7 @@ export default function ProjectsSection() {
               style={{ background: 'linear-gradient(to right, var(--border-hover), transparent)' }}
             />
           </div>
-          <p className="max-w-2xl mt-4 leading-relaxed text-justify" style={{ color: 'var(--text-secondary)' }}>
+          <p className="max-w-2xl mt-4 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
             These projects showcase my practical skills and experience, each with descriptions
             and links to code repositories and live demos. They demonstrate my ability to handle
             complex challenges, adapt to different technologies, and oversee projects from start
