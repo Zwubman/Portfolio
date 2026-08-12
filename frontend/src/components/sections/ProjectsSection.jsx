@@ -56,6 +56,65 @@ const projectGradients = [
   'linear-gradient(135deg, rgba(147,51,234,0.3) 0%, rgba(30,27,75,0.8) 100%)',
 ];
 
+// Distinct smooth colors per technology
+const techColorMap = {
+  // JavaScript family
+  'JavaScript':     { bg: 'rgba(234,179,8,0.15)',   border: 'rgba(234,179,8,0.35)',   color: '#facc15' },
+  'TypeScript':     { bg: 'rgba(59,130,246,0.15)',  border: 'rgba(59,130,246,0.35)',  color: '#60a5fa' },
+
+  // Frontend frameworks
+  'React':          { bg: 'rgba(34,211,238,0.15)',  border: 'rgba(34,211,238,0.35)',  color: '#22d3ee' },
+  'Next.js':        { bg: 'rgba(255,255,255,0.1)',  border: 'rgba(255,255,255,0.25)', color: '#e2e8f0' },
+  'Redux Toolkit':  { bg: 'rgba(139,92,246,0.15)',  border: 'rgba(139,92,246,0.35)',  color: '#a78bfa' },
+  'Tailwind CSS':   { bg: 'rgba(6,182,212,0.15)',   border: 'rgba(6,182,212,0.35)',   color: '#22d3ee' },
+  'Vue':            { bg: 'rgba(52,211,153,0.15)',  border: 'rgba(52,211,153,0.35)',  color: '#34d399' },
+  'Angular':        { bg: 'rgba(239,68,68,0.15)',   border: 'rgba(239,68,68,0.35)',   color: '#f87171' },
+
+  // Backend frameworks
+  'Node.js':        { bg: 'rgba(34,197,94,0.15)',   border: 'rgba(34,197,94,0.35)',   color: '#4ade80' },
+  'Express.js':     { bg: 'rgba(161,161,170,0.15)', border: 'rgba(161,161,170,0.35)', color: '#d4d4d8' },
+  'NestJS':         { bg: 'rgba(236,72,153,0.15)',  border: 'rgba(236,72,153,0.35)',  color: '#f472b6' },
+  'FastAPI':        { bg: 'rgba(20,184,166,0.15)',  border: 'rgba(20,184,166,0.35)',  color: '#2dd4bf' },
+  'Django':         { bg: 'rgba(16,185,129,0.15)',  border: 'rgba(16,185,129,0.35)',  color: '#34d399' },
+  'Flask':          { bg: 'rgba(148,163,184,0.15)', border: 'rgba(148,163,184,0.35)', color: '#94a3b8' },
+  'Spring Boot':    { bg: 'rgba(34,197,94,0.12)',   border: 'rgba(34,197,94,0.3)',    color: '#4ade80' },
+
+  // Databases
+  'PostgreSQL':     { bg: 'rgba(99,102,241,0.15)',  border: 'rgba(99,102,241,0.35)',  color: '#818cf8' },
+  'MySQL':          { bg: 'rgba(251,146,60,0.15)',  border: 'rgba(251,146,60,0.35)',  color: '#fb923c' },
+  'MongoDB':        { bg: 'rgba(52,211,153,0.15)',  border: 'rgba(52,211,153,0.35)',  color: '#34d399' },
+  'SQLite':         { bg: 'rgba(125,211,252,0.15)', border: 'rgba(125,211,252,0.35)', color: '#7dd3fc' },
+  'Redis':          { bg: 'rgba(239,68,68,0.15)',   border: 'rgba(239,68,68,0.35)',   color: '#f87171' },
+  'Sequelize':      { bg: 'rgba(168,85,247,0.15)',  border: 'rgba(168,85,247,0.35)',  color: '#c084fc' },
+  'Prisma':         { bg: 'rgba(59,130,246,0.15)',  border: 'rgba(59,130,246,0.35)',  color: '#60a5fa' },
+
+  // Tools / Infra
+  'Docker':         { bg: 'rgba(56,189,248,0.15)',  border: 'rgba(56,189,248,0.35)',  color: '#38bdf8' },
+  'Git':            { bg: 'rgba(249,115,22,0.15)',  border: 'rgba(249,115,22,0.35)',  color: '#fb923c' },
+  'REST API':       { bg: 'rgba(251,191,36,0.15)',  border: 'rgba(251,191,36,0.35)',  color: '#fbbf24' },
+  'SMS API':        { bg: 'rgba(167,139,250,0.15)', border: 'rgba(167,139,250,0.35)', color: '#a78bfa' },
+  'WebSocket':      { bg: 'rgba(34,211,238,0.12)',  border: 'rgba(34,211,238,0.3)',   color: '#22d3ee' },
+
+  // Languages
+  'Python':         { bg: 'rgba(250,204,21,0.15)',  border: 'rgba(250,204,21,0.35)',  color: '#facc15' },
+  'Java':           { bg: 'rgba(239,68,68,0.15)',   border: 'rgba(239,68,68,0.35)',   color: '#f87171' },
+  'Go':             { bg: 'rgba(34,211,238,0.15)',  border: 'rgba(34,211,238,0.35)',  color: '#22d3ee' },
+};
+
+// Deterministic fallback for unknown tags
+const hashColor = (str) => {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0;
+  const hue = Math.abs(h) % 360;
+  return {
+    bg:     `hsla(${hue},70%,60%,0.12)`,
+    border: `hsla(${hue},70%,60%,0.3)`,
+    color:  `hsl(${hue},80%,72%)`,
+  };
+};
+
+const getTagStyle = (tag) => techColorMap[tag] || hashColor(tag);
+
 export default function ProjectsSection() {
   const { data: serverProjects = [], isLoading } = useGetProjectsQuery();
   const projects =
@@ -193,20 +252,22 @@ export default function ProjectsSection() {
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {(project.tags || []).slice(0, 4).map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2.5 py-0.5 text-xs font-medium rounded-full tech-pill"
-                        style={{
-                          backgroundColor: 'rgba(124,58,237,0.1)',
-                          borderColor: 'rgba(124,58,237,0.2)',
-                          borderWidth: '1px',
-                          color: 'var(--accent)',
-                        }}
-                      >
-                        #{tag}
-                      </span>
-                    ))}
+                    {(project.tags || []).slice(0, 4).map((tag) => {
+                      const s = getTagStyle(tag);
+                      return (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-0.5 text-xs font-medium rounded-full"
+                          style={{
+                            backgroundColor: s.bg,
+                            border: `1px solid ${s.border}`,
+                            color: s.color,
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               </motion.div>
@@ -264,19 +325,22 @@ export default function ProjectsSection() {
                 </p>
 
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {(selectedProject.tags || []).map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 text-xs rounded-full"
-                      style={{
-                        backgroundColor: 'rgba(124,58,237,0.1)',
-                        border: '1px solid rgba(124,58,237,0.2)',
-                        color: 'var(--accent)',
-                      }}
-                    >
-                      #{tag}
-                    </span>
-                  ))}
+                  {(selectedProject.tags || []).map((tag) => {
+                    const s = getTagStyle(tag);
+                    return (
+                      <span
+                        key={tag}
+                        className="px-3 py-1 text-xs font-medium rounded-full"
+                        style={{
+                          backgroundColor: s.bg,
+                          border: `1px solid ${s.border}`,
+                          color: s.color,
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    );
+                  })}
                 </div>
 
                 <div className="flex gap-3">
