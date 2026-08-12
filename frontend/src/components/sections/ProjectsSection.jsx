@@ -79,9 +79,7 @@ export default function ProjectsSection() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <p className="text-sm font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--accent)' }}>
-            Portfolio
-          </p>
+
           <div className="flex items-end gap-6">
             <h2
               className="text-4xl sm:text-5xl font-black"
