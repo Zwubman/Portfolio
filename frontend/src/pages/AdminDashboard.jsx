@@ -175,7 +175,7 @@ export default function AdminDashboard() {
     title: '',
     summary: '',
     description: '',
-    features: '',
+    features: [''],
     image_url: '',
     imageFile: null,
     tags: '',
@@ -214,7 +214,7 @@ export default function AdminDashboard() {
       title: '',
       summary: '',
       description: '',
-      features: '',
+      features: [''],
       image_url: '',
       imageFile: null,
       tags: '',
@@ -232,7 +232,7 @@ export default function AdminDashboard() {
       title: proj.title,
       summary: proj.summary || '',
       description: proj.description || '',
-      features: Array.isArray(proj.features) ? proj.features.join('\n') : '',
+      features: Array.isArray(proj.features) && proj.features.length > 0 ? proj.features : [''],
       image_url: proj.image_url || '',
       imageFile: null,
       tags: (proj.tags || []).join(', '),
@@ -252,8 +252,8 @@ export default function AdminDashboard() {
     formData.append('summary', projectForm.summary);
     formData.append('description', projectForm.description);
     
-    // Convert newline features to array string
-    const featureArray = projectForm.features ? projectForm.features.split('\n').map((f) => f.trim()).filter(Boolean) : [];
+    // Filter out empty features
+    const featureArray = projectForm.features.filter((f) => f.trim() !== '');
     formData.append('features', JSON.stringify(featureArray));
     
     // Convert comma tags to array string
@@ -297,6 +297,29 @@ export default function AdminDashboard() {
         toast.error('Failed to delete project.');
       }
     }
+  };
+
+  const addProjectFeature = () => {
+    setProjectForm((prev) => ({
+      ...prev,
+      features: [...prev.features, ''],
+    }));
+  };
+
+  const removeProjectFeature = (idx) => {
+    setProjectForm((prev) => ({
+      ...prev,
+      features: prev.features.filter((_, i) => i !== idx),
+    }));
+  };
+
+  const updateProjectFeature = (idx, value) => {
+    const fresh = [...projectForm.features];
+    fresh[idx] = value;
+    setProjectForm((prev) => ({
+      ...prev,
+      features: fresh,
+    }));
   };
 
   // --- Experience Handlers ---
@@ -797,14 +820,38 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-purple-300 mb-1.5">Key Features (One per line)</label>
-                <textarea
-                  rows={4}
-                  value={projectForm.features}
-                  onChange={(e) => setProjectForm({ ...projectForm, features: e.target.value })}
-                  className="w-full px-3 py-2.5 rounded-xl bg-[#0E0B24] border border-purple-500/15 text-purple-100 text-sm focus:outline-none focus:border-purple-500/40 resize-none whitespace-pre-wrap"
-                  placeholder="Role-Based Access Control&#10;Real-time WebSocket chat&#10;Stripe Payment Gateway..."
-                />
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-semibold text-purple-300">Key Features</label>
+                  <button
+                    type="button"
+                    onClick={addProjectFeature}
+                    className="text-xs text-purple-400 hover:text-white flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus size={12} /> Add Feature
+                  </button>
+                </div>
+                <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                  {projectForm.features.map((pt, idx) => (
+                    <div key={idx} className="flex gap-2">
+                      <input
+                        type="text"
+                        required
+                        value={pt}
+                        onChange={(e) => updateProjectFeature(idx, e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl bg-[#0E0B24] border border-purple-500/15 text-purple-100 text-sm focus:outline-none"
+                        placeholder="State technical feature or highlight..."
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeProjectFeature(idx)}
+                        disabled={projectForm.features.length <= 1}
+                        className="p-2 border border-red-500/20 text-red-400 rounded-xl hover:bg-red-500/10 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                      >
+                        <Trash size={14} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div>
