@@ -24,6 +24,7 @@ const allowedOrigins = [
   'http://wubamlak.com',
   'https://www.wubamlak.com',
   'http://www.wubamlak.com',
+  'https://wubamlakg.netlify.app',
 ];
 app.use(cors({
   origin: function (origin, callback) {
