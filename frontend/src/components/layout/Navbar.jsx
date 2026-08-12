@@ -109,27 +109,7 @@ export default function Navbar() {
                   </button>
                 ))}
 
-              {/* Admin */}
-              <Link
-                to="/admin"
-                className="ml-1 flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded border transition-all duration-300"
-                style={{
-                  color: 'var(--accent)',
-                  borderColor: 'var(--border)',
-                  backgroundColor: 'transparent',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(124,58,237,0.1)';
-                  e.currentTarget.style.borderColor = 'var(--accent)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.borderColor = 'var(--border)';
-                }}
-              >
-                <Shield size={12} />
-                Admin
-              </Link>
+
             </div>
 
             {/* ── Theme Toggle (Sun / Moon) ── */}
@@ -189,15 +169,7 @@ export default function Navbar() {
                     {link.name}
                   </button>
                 ))}
-              <Link
-                to="/admin"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center gap-2 px-4 py-3 rounded-lg text-sm transition-all"
-                style={{ color: 'var(--accent)' }}
-              >
-                <Shield size={14} />
-                Admin
-              </Link>
+
             </div>
           </motion.div>
         )}
