@@ -29,7 +29,7 @@ export default function NotFound() {
           </h1>
           
           <h2 className="text-2xl sm:text-3xl font-semibold text-purple-100 mb-4">
-            Looks like you're lost in space
+            Not Found
           </h2>
           
           <p className="text-purple-200/60 mb-10 max-w-md mx-auto text-sm sm:text-base leading-relaxed">
