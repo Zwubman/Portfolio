@@ -173,9 +173,9 @@ export default function ProjectsSection() {
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
                 className="group relative rounded-2xl overflow-hidden card-base flex flex-col h-full"
               >
-                {/* Image / gradient header */}
+                  {/* Image / gradient header */}
                 <div
-                  className="relative h-48 sm:h-56 shrink-0 overflow-hidden"
+                  className="relative h-56 sm:h-72 shrink-0 overflow-hidden"
                   style={{ background: projectGradients[idx % projectGradients.length] }}
                 >
                   {project.image_url ? (
@@ -240,16 +240,22 @@ export default function ProjectsSection() {
                 </div>
 
                 {/* Content */}
-                <div className="p-5 flex-1 flex flex-col">
+                <div className="p-6 flex-1 flex flex-col">
                   <h3
-                    className="text-lg font-bold mb-2 transition-colors"
+                    className="text-xl font-bold mb-3 transition-colors"
                     style={{ color: 'var(--text-primary)', fontFamily: "'Poppins', sans-serif" }}
                   >
                     {project.title}
                   </h3>
-                  <p className="text-sm line-clamp-6 mb-4 leading-relaxed transition-colors" style={{ color: 'var(--text-secondary)' }}>
-                    {project.summary || project.description}
-                  </p>
+                  <div className="text-[14.5px] mb-5 leading-relaxed transition-colors text-justify" style={{ color: 'var(--text-secondary)' }}>
+                    {(() => {
+                      const text = project.summary || project.description || '';
+                      if (text.length > 220) {
+                        return text.slice(0, 220).trim() + ' .....';
+                      }
+                      return text;
+                    })()}
+                  </div>
                   <div className="flex flex-wrap gap-1.5 mt-auto">
                     {(project.tags || []).slice(0, 4).map((tag) => {
                       const s = getTagStyle(tag);
