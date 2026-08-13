@@ -1,12 +1,12 @@
-# 🚀 Wubamlak Girum — Full-Stack Developer Portfolio
+# Wubamlak Girum — Full-Stack Developer Portfolio
 
 A modern, responsive, and fully dynamic developer portfolio built with **React 19**, **Tailwind CSS v4**, **Node.js / Express 5**, and **PostgreSQL**. Features a sleek dark-themed UI with smooth animations, an admin dashboard for content management, and a RESTful API backend.
 
-🌐 **Live Site:** [wubamlakg.netlify.app](https://wubamlakg.netlify.app)
+**Live Site:** [wubamlakg.netlify.app](https://wubamlakg.netlify.app)
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 ### Frontend
 - **Modern Dark Theme UI** — Premium glassmorphism design with purple/fuchsia accent palette, smooth gradients, and micro-animations powered by Framer Motion
@@ -28,7 +28,7 @@ A modern, responsive, and fully dynamic developer portfolio built with **React 1
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer        | Technologies                                                    |
 | ------------ | --------------------------------------------------------------- |
@@ -40,7 +40,7 @@ A modern, responsive, and fully dynamic developer portfolio built with **React 1
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 my_portfolio/
@@ -73,7 +73,7 @@ my_portfolio/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -139,7 +139,7 @@ npm run preview      # Preview production build
 
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 | Method   | Endpoint              | Description                  | Auth     |
 | -------- | --------------------- | ---------------------------- | -------- |
@@ -165,27 +165,27 @@ npm run preview      # Preview production build
 
 ---
 
-## 🎨 Screenshots
+## Screenshots
 
 > Visit the live site at [wubamlakg.netlify.app](https://wubamlakg.netlify.app) to see the portfolio in action.
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **ISC License**.
 
 ---
 
-## 👤 Author
+## Author
 
 **Wubamlak Girum** — Full-Stack Software Engineer
 
-- 🌐 [Portfolio](https://wubamlakg.netlify.app)
-- 💻 [GitHub](https://github.com/Zwubman)
+- [Portfolio](https://wubamlakg.netlify.app)
+- [GitHub](https://github.com/Zwubman)
 
 ---
 
 <p align="center">
-  Built with ❤️ using React & Node.js
+  Built with React & Node.js
 </p>
