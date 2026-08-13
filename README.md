@@ -56,7 +56,7 @@ npm install
 
 Create a `.env` file in the `backend/` directory and define the required values:
 
-```
+```ini
 PORT=5000
 DB_NAME=portfolio_db
 DB_USER=your_postgres_user
@@ -89,7 +89,7 @@ npm install
 
 Create a `.env` file in the `frontend/` directory:
 
-```
+```ini
 VITE_API_URL=http://localhost:5000/api
 ```
 
@@ -130,28 +130,6 @@ npm run build
 - `backend/routes/` - API route definitions
 - `backend/utils/` - seed scripts and shared helpers
 - `backend/configs/` - database configuration
-
-## API Endpoints
-
-- `POST /api/auth/login` - admin login
-- `GET /api/projects` - list all projects
-- `POST /api/projects` - create a project
-- `PUT /api/projects/:id` - update a project
-- `DELETE /api/projects/:id` - delete a project
-- `GET /api/skills` - list all skills
-- `POST /api/skills` - create a skill
-- `PUT /api/skills/:id` - update a skill
-- `DELETE /api/skills/:id` - delete a skill
-- `GET /api/experiences` - list all experiences
-- `POST /api/experiences` - create an experience
-- `PUT /api/experiences/:id` - update an experience
-- `DELETE /api/experiences/:id` - delete an experience
-- `POST /api/contact` - submit a contact message
-- `GET /api/contact` - list all messages
-- `DELETE /api/contact/:id` - delete a message
-- `GET /api/resume` - download resume
-- `POST /api/resume` - upload resume
-- `GET /api/health` - server health check
 
 ## Purpose
 
