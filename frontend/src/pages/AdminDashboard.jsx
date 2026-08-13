@@ -276,7 +276,7 @@ export default function AdminDashboard() {
         const uploadPayload = { id: projectForm.id, ...Object.fromEntries(formData) };
         // Wait, RTK Query body can safely accept formData itself for mutations where body=formData
         // To correctly route the ID and FormData in RTK: 
-        await updateProject({ id: projectForm.id, body: formData }).unwrap();
+        await updateProject({ id: projectForm.id, formData }).unwrap();
         toast.success('Project updated successfully.');
       } else {
         await createProject(formData).unwrap();

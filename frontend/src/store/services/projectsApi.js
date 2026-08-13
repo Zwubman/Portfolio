@@ -25,10 +25,10 @@ export const projectsApi = createApi({
       invalidatesTags: ['Projects'],
     }),
     updateProject: builder.mutation({
-      query: ({ id, ...body }) => ({
+      query: ({ id, formData }) => ({
         url: `/projects/${id}`,
         method: 'PUT',
-        body,
+        body: formData,
       }),
       invalidatesTags: ['Projects'],
     }),
