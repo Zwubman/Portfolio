@@ -1,5 +1,7 @@
 # Wubamlak Girum Portfolio
 
+🌐 **Live Site:** [https://wubamlakg.netlify.app](https://wubamlakg.netlify.app)
+
 A modern, full-stack developer portfolio built to showcase projects, skills, and professional experience with a dynamic admin-managed content system.
 
 ## Overview
