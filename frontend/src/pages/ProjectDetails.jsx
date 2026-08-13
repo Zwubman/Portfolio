@@ -148,12 +148,12 @@ export default function ProjectDetails() {
         {/* Top bar with back button */}
         <div className="mb-8">
           <Link
-            to="/"
+            to="/#projects"
             onClick={() => {
               setTimeout(() => {
                 const el = document.getElementById('projects');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
+              }, 300);
             }}
             className="inline-flex items-center gap-2 text-sm font-medium text-purple-300 hover:text-white transition-all group"
           >
