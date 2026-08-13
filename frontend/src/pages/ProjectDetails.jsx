@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Github, ExternalLink, Star, Code, Server, Cpu, Database, ShieldAlert } from 'lucide-react';
@@ -98,6 +99,10 @@ const mockProjectsFallback = [
 export default function ProjectDetails() {
   const { id } = useParams();
   const { data: serverProjects = [], isLoading } = useGetProjectsQuery();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // Find project by ID or slug
   const allProjects = serverProjects && serverProjects.length > 0 ? serverProjects : mockProjectsFallback;
