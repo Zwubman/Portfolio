@@ -56,7 +56,7 @@ npm install
 
 Create a `.env` file in the `backend/` directory and define the required values:
 
-```ini
+```env
 PORT=5000
 DB_NAME=portfolio_db
 DB_USER=your_postgres_user
@@ -89,7 +89,7 @@ npm install
 
 Create a `.env` file in the `frontend/` directory:
 
-```ini
+```env
 VITE_API_URL=http://localhost:5000/api
 ```
 
