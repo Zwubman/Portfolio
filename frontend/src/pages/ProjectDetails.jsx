@@ -128,6 +128,18 @@ export default function ProjectDetails() {
 
 
 
+  // Split a feature string like "Title: Description" into { title, desc }
+  const parseFeature = (f) => {
+    const colonIdx = f.indexOf(':');
+    if (colonIdx > 0 && colonIdx < 60) {
+      return { title: f.slice(0, colonIdx).trim(), desc: f.slice(colonIdx + 1).trim() };
+    }
+    return { title: '', desc: f };
+  };
+
+  // Icons for cycling through feature cards
+  const featureIcons = [Code, Server, Cpu, Database, ShieldAlert, Star];
+
   return (
     <div className="min-h-screen flex flex-col bg-[#07051a] text-white selection:bg-[#7c3aed]/30 selection:text-white">
       <Navbar />
@@ -138,7 +150,6 @@ export default function ProjectDetails() {
           <Link
             to="/"
             onClick={() => {
-              // Scroll to project section if going home
               setTimeout(() => {
                 const el = document.getElementById('projects');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -151,144 +162,151 @@ export default function ProjectDetails() {
           </Link>
         </div>
 
-        {/* Project Layout Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-          {/* Main Visuals & Title (Col 7) */}
-          <div className="lg:col-span-7 space-y-6">
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="relative rounded-2xl overflow-hidden border border-purple-500/10 bg-[#0e0b30]/60 backdrop-blur-md p-2 shadow-2xl shadow-purple-900/10"
-            >
-              {project.image_url ? (
-                <img
-                  src={project.image_url}
-                  alt={project.title}
-                  className="w-full rounded-xl object-cover object-top max-h-[500px]"
-                />
-              ) : (
-                <div className="w-full h-80 rounded-xl bg-purple-900/15 flex items-center justify-center text-purple-400">
-                  No Preview Image Available
-                </div>
-              )}
+        {/* ===== HERO: Full-width Image ===== */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="relative rounded-2xl overflow-hidden border border-purple-500/10 bg-[#0e0b30]/60 backdrop-blur-md p-2 shadow-2xl shadow-purple-900/10 mb-8"
+        >
+          {project.image_url ? (
+            <img
+              src={project.image_url}
+              alt={project.title}
+              className="w-full rounded-xl object-cover object-top max-h-[520px]"
+            />
+          ) : (
+            <div className="w-full h-72 sm:h-80 rounded-xl bg-purple-900/15 flex items-center justify-center text-purple-400">
+              No Preview Image Available
+            </div>
+          )}
 
-              {project.featured && (
-                <div className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center bg-[#fbbf24]/20 border border-[#fbbf24]/40 rounded-full backdrop-blur-md shadow-lg shadow-amber-500/25">
-                  <Star size={16} fill="#fbbf24" className="text-[#fbbf24]" />
-                </div>
-              )}
-            </motion.div>
+          {project.featured && (
+            <div className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center bg-[#fbbf24]/20 border border-[#fbbf24]/40 rounded-full backdrop-blur-md shadow-lg shadow-amber-500/25">
+              <Star size={16} fill="#fbbf24" className="text-[#fbbf24]" />
+            </div>
+          )}
+        </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="space-y-4"
-            >
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                {project.title}
-              </h1>
+        {/* ===== Title + Tags ===== */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="space-y-4 mb-10"
+        >
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>
+            {project.title}
+          </h1>
 
-              {/* Technologies */}
-              <div className="flex flex-wrap gap-2">
-                {(project.tags || []).map((tag) => {
-                  const s = getTagStyle(tag);
-                  return (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 text-xs font-semibold rounded-full border"
-                      style={{
-                        backgroundColor: s.bg,
-                        borderColor: s.border,
-                        color: s.color,
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  );
-                })}
-              </div>
-            </motion.div>
+          <div className="flex flex-wrap gap-2">
+            {(project.tags || []).map((tag) => {
+              const s = getTagStyle(tag);
+              return (
+                <span
+                  key={tag}
+                  className="px-3 py-1 text-xs font-semibold rounded-full border"
+                  style={{
+                    backgroundColor: s.bg,
+                    borderColor: s.border,
+                    color: s.color,
+                  }}
+                >
+                  {tag}
+                </span>
+              );
+            })}
           </div>
+        </motion.div>
 
-          {/* Description & Technical highlights (Col 5) */}
-          <div className="lg:col-span-5 space-y-8">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="p-6 rounded-2xl border border-purple-500/10 bg-[#0e0b35]/40 backdrop-blur-sm space-y-4"
-            >
-              <h3 className="text-lg font-bold text-purple-200 border-b border-purple-500/10 pb-2 flex items-center gap-2">
-                <Code size={18} className="text-purple-400" />
-                Project Overview
-              </h3>
-              <p className="text-[14.5px] leading-relaxed text-purple-200/80 text-justify">
-                {project.description}
+        {/* ===== Description Card (full-width) ===== */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="p-6 sm:p-8 rounded-2xl border border-purple-500/10 bg-[#0e0b35]/40 backdrop-blur-sm space-y-5 mb-12"
+        >
+          <h3 className="text-lg font-bold text-purple-200 border-b border-purple-500/10 pb-2 flex items-center gap-2">
+            <Code size={18} className="text-purple-400" />
+            Project Overview
+          </h3>
+
+          {/* Render description line-by-line for full detail */}
+          <div className="space-y-3">
+            {(project.description || '').split('\n').filter(Boolean).map((para, idx) => (
+              <p key={idx} className="text-[14.5px] leading-relaxed text-purple-200/80 text-justify">
+                {para}
               </p>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3 pt-4">
-                {project.github_url && (
-                  <a
-                    href={project.github_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-5 py-3 rounded-xl border border-purple-500/30 bg-[#7c3aed]/10 text-purple-200 hover:text-white hover:bg-[#7c3aed]/20 transition-all font-medium text-xs sm:text-sm cursor-pointer"
-                  >
-                    <Github size={16} />
-                    View Code Repository
-                  </a>
-                )}
-                {project.live_url && (
-                  <a
-                    href={project.live_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white hover:opacity-90 hover:scale-[1.01] transition-all font-medium text-xs sm:text-sm cursor-pointer shadow-lg shadow-purple-500/15"
-                  >
-                    <ExternalLink size={16} />
-                    Try Live Application
-                  </a>
-                )}
-              </div>
-            </motion.div>
-
-            {/* Engineered Details Container */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="space-y-4"
-            >
-              {(project.features && project.features.length > 0) && (
-                <>
-                  <h3 className="text-lg font-bold text-purple-200 flex items-center gap-2">
-                    <Star size={18} className="text-fuchsia-400" />
-                    Key Features
-                  </h3>
-
-                  <div className="space-y-3">
-                    {project.features.map((feature, idx) => (
-                      <div
-                        key={idx}
-                        className="p-4 rounded-xl border border-purple-500/10 bg-[#0e0b35]/20 hover:border-purple-500/30 transition-all flex items-start gap-4"
-                      >
-                        <div className="p-2 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-300 shrink-0 mt-0.5">
-                          <Star size={14} fill="currentColor" />
-                        </div>
-                        <div>
-                          <p className="text-[14.5px] leading-relaxed text-purple-100">{feature}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-            </motion.div>
+            ))}
           </div>
-        </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap gap-3 pt-4">
+            {project.github_url && (
+              <a
+                href={project.github_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-5 py-3 rounded-xl border border-purple-500/30 bg-[#7c3aed]/10 text-purple-200 hover:text-white hover:bg-[#7c3aed]/20 transition-all font-medium text-xs sm:text-sm cursor-pointer"
+              >
+                <Github size={16} />
+                View Code Repository
+              </a>
+            )}
+            {project.live_url && (
+              <a
+                href={project.live_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white hover:opacity-90 hover:scale-[1.01] transition-all font-medium text-xs sm:text-sm cursor-pointer shadow-lg shadow-purple-500/15"
+              >
+                <ExternalLink size={16} />
+                Try Live Application
+              </a>
+            )}
+          </div>
+        </motion.div>
+
+        {/* ===== Key Features (2-column grid) ===== */}
+        {(project.features && project.features.length > 0) && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.35 }}
+            className="mb-12"
+          >
+            <h3 className="text-xl font-bold text-purple-200 flex items-center gap-2 mb-6">
+              <Star size={20} className="text-fuchsia-400" />
+              Key Features & Technical Highlights
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {project.features.map((feature, idx) => {
+                const { title, desc } = parseFeature(feature);
+                const IconComp = featureIcons[idx % featureIcons.length];
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: 0.4 + idx * 0.05 }}
+                    className="p-5 rounded-xl border border-purple-500/10 bg-[#0e0b35]/30 hover:border-purple-500/25 hover:bg-[#0e0b35]/50 transition-all flex items-start gap-4 group"
+                  >
+                    <div className="p-2.5 rounded-lg bg-gradient-to-br from-purple-500/15 to-fuchsia-500/10 border border-purple-500/20 text-purple-300 group-hover:text-fuchsia-300 shrink-0 mt-0.5 transition-colors">
+                      <IconComp size={16} />
+                    </div>
+                    <div className="min-w-0">
+                      {title && (
+                        <p className="text-sm font-semibold text-purple-100 mb-1">{title}</p>
+                      )}
+                      <p className="text-[13.5px] leading-relaxed text-purple-200/70">{desc}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
       </main>
 
       <Footer />
