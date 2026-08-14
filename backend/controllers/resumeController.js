@@ -6,7 +6,7 @@ const getResume = async (req, res) => {
     const result = await cloudinary.api.resources({
       type: 'upload',
       prefix: 'portfolio_resume/resume',
-      resource_type: 'raw',
+      resource_type: 'image',
       max_results: 1
     });
     if (result.resources && result.resources.length > 0) {
@@ -33,7 +33,7 @@ const uploadResume = (req, res) => {
 // DELETE /api/resume — delete the current resume
 const deleteResume = async (req, res) => {
   try {
-    await cloudinary.uploader.destroy('portfolio_resume/resume', { resource_type: 'raw' });
+    await cloudinary.uploader.destroy('portfolio_resume/resume', { resource_type: 'image' });
     return res.json({ message: 'Resume deleted successfully.' });
   } catch (err) {
     console.error('Error deleting resume from Cloudinary:', err);

@@ -7,7 +7,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: 'portfolio_resume',
     format: async (req, file) => 'pdf',
-    resource_type: 'raw',
+    resource_type: 'image',
     public_id: (req, file) => 'resume', // fixed name so it overwrites
   },
 });
