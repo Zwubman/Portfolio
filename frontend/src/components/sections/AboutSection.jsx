@@ -223,7 +223,7 @@ export default function AboutSection() {
 
             <div className="relative z-30 mt-6">
               <a
-                href={resumeUrl || "/Wubamlak_Girum_Resume.pdf"}
+                href={resumeUrl || "https://portfolio-huo0.onrender.com/api/resume"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block px-7 py-2.5 rounded-md text-white font-medium text-[15px] transition-all hover:opacity-90 flex-shrink-0 shadow-lg shadow-purple-500/20"

@@ -13,7 +13,7 @@ export const resumeApi = createApi({
   tagTypes: ['Resume'],
   endpoints: (builder) => ({
     getResume: builder.query({
-      query: () => '/resume',
+      query: () => '/resume/info',
       providesTags: ['Resume'],
     }),
     uploadResume: builder.mutation({

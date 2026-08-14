@@ -1,17 +1,7 @@
 const multer = require('multer');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('../configs/cloudinary_config');
 
-// Use Cloudinary storage with resource_type 'raw' for PDFs
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: async (req, file) => ({
-    folder: 'portfolio_resume',
-    resource_type: 'raw',
-    public_id: 'resume', // fixed public_id so it always overwrites
-    format: 'pdf',
-  }),
-});
+// Use memory storage — we'll save the PDF as base64 in PostgreSQL
+const storage = multer.memoryStorage();
 
 const uploadResume = multer({
   storage,
