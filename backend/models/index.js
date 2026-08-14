@@ -3,6 +3,7 @@ const Project = require('./Project');
 const Experience = require('./Experience');
 const Skill = require('./Skill');
 const ContactMessage = require('./ContactMessage');
+const Setting = require('./Setting');
 
 module.exports = {
   User,
@@ -10,4 +11,5 @@ module.exports = {
   Experience,
   Skill,
   ContactMessage,
+  Setting,
 };
