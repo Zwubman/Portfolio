@@ -46,7 +46,7 @@ const createProject = async (req, res) => {
     // Handle Uploaded File
     let finalImageUrl = image_url || '';
     if (req.file) {
-      finalImageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+      finalImageUrl = req.file.path;
     }
 
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -98,8 +98,7 @@ const updateProject = async (req, res) => {
     let finalImageUrl = image_url !== undefined ? image_url : project.image_url;
     
     if (req.file) {
-      // Dynamic absolute URL based on host
-      finalImageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+      finalImageUrl = req.file.path;
     }
 
     await project.update({
