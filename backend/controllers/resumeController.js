@@ -1,44 +1,27 @@
-const cloudinary = require('../configs/cloudinary_config');
-
-// GET /api/resume — returns the public URL of the current resume (or null)
-const getResume = async (req, res) => {
-  try {
-    const result = await cloudinary.api.resources({
-      type: 'upload',
-      prefix: 'portfolio_resume/resume',
-      resource_type: 'image',
-      max_results: 1
-    });
-    if (result.resources && result.resources.length > 0) {
-      // Return the secure URL from Cloudinary
-      return res.json({ resume_url: result.resources[0].secure_url });
-    }
-  } catch (err) {
-    console.error('Error fetching resume from Cloudinary:', err);
-  }
-  return res.json({ resume_url: null });
+// GET /api/resume — returns the static Netlify-hosted resume URL
+const getResume = (req, res) => {
+  // The resume PDF is a static file hosted directly on Netlify CDN.
+  // This is persistent and never affected by Render's ephemeral filesystem.
+  const resumeUrl = 'https://wubamlakg.netlify.app/Wubamlak_Girum_Resume.pdf';
+  return res.json({ resume_url: resumeUrl });
 };
 
-// POST /api/resume — upload or replace the resume PDF
+// POST /api/resume — endpoint kept for compatibility (not used for static resume)
 const uploadResume = (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No PDF file uploaded.' });
   }
+  // Return the static URL — the actual file in the frontend/public/
+  // folder needs to be updated via a new deployment.
   return res.status(201).json({
-    message: 'Resume uploaded successfully.',
-    resume_url: req.file.path,
+    message: 'Resume URL updated. Please redeploy the frontend with the new PDF in public/ folder.',
+    resume_url: 'https://wubamlakg.netlify.app/Wubamlak_Girum_Resume.pdf',
   });
 };
 
-// DELETE /api/resume — delete the current resume
-const deleteResume = async (req, res) => {
-  try {
-    await cloudinary.uploader.destroy('portfolio_resume/resume', { resource_type: 'image' });
-    return res.json({ message: 'Resume deleted successfully.' });
-  } catch (err) {
-    console.error('Error deleting resume from Cloudinary:', err);
-    return res.status(500).json({ message: 'Failed to delete resume.' });
-  }
+// DELETE /api/resume
+const deleteResume = (req, res) => {
+  return res.json({ message: 'Resume is managed as a static Netlify asset. Update the public/ folder to change it.' });
 };
 
 module.exports = { getResume, uploadResume, deleteResume };
