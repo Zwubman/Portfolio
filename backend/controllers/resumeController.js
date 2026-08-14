@@ -13,12 +13,14 @@ const getResume = async (req, res) => {
 
     const pdfBuffer = Buffer.from(setting.value, 'base64');
 
-    // Serve as PDF so browser opens it inline
+    // Serve as PDF so browser opens it inline — no caching so updates are immediate
     res.set({
       'Content-Type': 'application/pdf',
       'Content-Disposition': 'inline; filename="Wubamlak_Girum_Resume.pdf"',
       'Content-Length': pdfBuffer.length,
-      'Cache-Control': 'public, max-age=3600',
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
     });
 
     return res.send(pdfBuffer);

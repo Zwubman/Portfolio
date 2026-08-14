@@ -100,7 +100,7 @@ function ResumeTab() {
               </div>
               <div className="flex gap-2 flex-shrink-0">
                 <a
-                  href={resumeUrl}
+                  href={`${resumeUrl}?t=${Date.now()}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-3 py-1.5 rounded-lg border border-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-500/10 text-xs flex items-center gap-1.5"
