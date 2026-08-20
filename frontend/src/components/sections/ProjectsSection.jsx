@@ -284,7 +284,7 @@ export default function ProjectsSection() {
                       })()}
                     </div>
                     <div className="flex flex-wrap gap-1.5 mt-auto">
-                      {(project.tags || []).slice(0, 4).map((tag) => {
+                      {(project.tags || []).map((tag) => {
                         const s = getTagStyle(tag);
                         return (
                           <span
