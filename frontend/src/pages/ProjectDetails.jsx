@@ -224,25 +224,23 @@ export default function ProjectDetails() {
           </div>
         </motion.div>
 
-        {/* ===== Description Card (full-width) ===== */}
+        {/* ===== Project Overview Card (Summary) ===== */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="p-6 sm:p-8 rounded-2xl border border-purple-500/10 bg-[#0e0b35]/40 backdrop-blur-sm space-y-5 mb-12"
+          className="p-6 sm:p-8 rounded-2xl border border-purple-500/10 bg-[#0e0b35]/40 backdrop-blur-sm space-y-5 mb-8"
         >
           <h3 className="text-lg font-bold text-purple-200 border-b border-purple-500/10 pb-2 flex items-center gap-2">
             <Code size={18} className="text-purple-400" />
             Project Overview
           </h3>
 
-          {/* Render description line-by-line for full detail */}
+          {/* Render summary */}
           <div className="space-y-3">
-            {(project.description || '').split('\n').filter(Boolean).map((para, idx) => (
-              <p key={idx} className="text-[14.5px] leading-relaxed text-purple-200/80 text-justify">
-                {para}
-              </p>
-            ))}
+            <p className="text-[14.5px] leading-relaxed text-purple-200/80 text-justify">
+              {project.summary || project.description?.split('\n')[0] || 'No summary available.'}
+            </p>
           </div>
 
           {/* Action Buttons */}
@@ -271,6 +269,75 @@ export default function ProjectDetails() {
             )}
           </div>
         </motion.div>
+
+        {/* ===== Project Full Description ===== */}
+        {project.description && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="p-6 sm:p-8 rounded-2xl border border-purple-500/10 bg-[#0e0b35]/40 backdrop-blur-sm space-y-5 mb-12"
+          >
+            <h3 className="text-lg font-bold text-purple-200 border-b border-purple-500/10 pb-2 flex items-center gap-2">
+              <Server size={18} className="text-purple-400" />
+              Project Full Description
+            </h3>
+
+            {/* Render description with markdown-style formatting */}
+            <div className="space-y-4 prose prose-invert prose-purple max-w-none">
+              {project.description.split('\n').filter(Boolean).map((para, idx) => {
+                // Check if it's a header (starts with ###, ##, or #)
+                if (para.startsWith('### ')) {
+                  return (
+                    <h4 key={idx} className="text-base font-bold text-purple-100 mt-6 mb-3">
+                      {para.replace(/^###\s*/, '')}
+                    </h4>
+                  );
+                } else if (para.startsWith('## ')) {
+                  return (
+                    <h3 key={idx} className="text-lg font-bold text-purple-100 mt-7 mb-3">
+                      {para.replace(/^##\s*/, '')}
+                    </h3>
+                  );
+                } else if (para.startsWith('# ')) {
+                  return (
+                    <h2 key={idx} className="text-xl font-bold text-purple-100 mt-8 mb-4">
+                      {para.replace(/^#\s*/, '')}
+                    </h2>
+                  );
+                }
+                // Check if it's a bold section (starts with **)
+                else if (para.startsWith('**') && para.includes('**')) {
+                  const boldMatch = para.match(/^\*\*(.+?)\*\*/);
+                  if (boldMatch) {
+                    const boldText = boldMatch[1];
+                    const restText = para.slice(boldMatch[0].length);
+                    return (
+                      <p key={idx} className="text-[14.5px] leading-relaxed text-purple-200/80 text-justify">
+                        <span className="font-semibold text-purple-100">{boldText}</span>
+                        {restText}
+                      </p>
+                    );
+                  }
+                }
+                // Check if it's a list item
+                else if (para.startsWith('- ')) {
+                  return (
+                    <li key={idx} className="text-[14.5px] leading-relaxed text-purple-200/80 ml-4">
+                      {para.replace(/^-\s*/, '')}
+                    </li>
+                  );
+                }
+                // Regular paragraph
+                return (
+                  <p key={idx} className="text-[14.5px] leading-relaxed text-purple-200/80 text-justify">
+                    {para}
+                  </p>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
 
         {/* ===== Key Features (2-column grid) ===== */}
         {(project.features && project.features.length > 0) && (

@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useGetProjectsQuery } from '../../store/services/projectsApi';
-import { ExternalLink, Github, Eye, Star } from 'lucide-react';
+import { ExternalLink, Github, Eye, Star, ChevronDown, ChevronUp } from 'lucide-react';
 
 const mockProjectsFallback = [
   {
@@ -120,6 +121,31 @@ export default function ProjectsSection() {
   const projects =
     serverProjects && serverProjects.length > 0 ? serverProjects : mockProjectsFallback;
 
+  // Pagination state
+  const [visibleCount, setVisibleCount] = useState(6);
+  const PROJECTS_PER_PAGE = 6;
+  const INITIAL_COUNT = 6;
+
+  // Calculate visible projects
+  const visibleProjects = projects.slice(0, visibleCount);
+  const hasMore = visibleCount < projects.length;
+  const showLess = visibleCount > INITIAL_COUNT && visibleCount >= projects.length;
+
+  // Load more handler
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + PROJECTS_PER_PAGE);
+  };
+
+  // Show less handler
+  const handleShowLess = () => {
+    setVisibleCount(INITIAL_COUNT);
+    // Smooth scroll to projects section
+    const projectsSection = document.getElementById('projects');
+    if (projectsSection) {
+      projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <section
       id="projects"
@@ -163,121 +189,192 @@ export default function ProjectsSection() {
             <div className="w-8 h-8 rounded-full animate-spin" style={{ border: '2px solid var(--border)', borderTopColor: '#7c3aed' }} />
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project, idx) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="group relative rounded-2xl overflow-hidden card-base flex flex-col h-full"
-              >
-                  {/* Image / gradient header */}
-                <div
-                  className="relative h-56 sm:h-72 shrink-0 overflow-hidden"
-                  style={{ background: projectGradients[idx % projectGradients.length] }}
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {visibleProjects.map((project, idx) => (
+                <motion.div
+                  key={project.id}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.1 }}
+                  className="group relative rounded-2xl overflow-hidden card-base flex flex-col h-full"
                 >
-                  {project.image_url ? (
-                    <img
-                      src={project.image_url}
-                      alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div
-                        className="text-6xl font-black text-white/20"
-                        style={{ fontFamily: "'Poppins', sans-serif" }}
-                      >
-                        {project.title?.charAt(0)}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Hover overlay */}
+                    {/* Image / gradient header */}
                   <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-sm"
-                    style={{ backgroundColor: 'rgba(5, 8, 22, 0.65)' }}
+                    className="relative h-56 sm:h-72 shrink-0 overflow-hidden"
+                    style={{ background: projectGradients[idx % projectGradients.length] }}
                   >
-                    <Link
-                      to={`/projects/${project.id}`}
-                      className="p-2.5 rounded-xl transition-all cursor-pointer flex items-center justify-center"
-                      style={{ backgroundColor: '#7c3aed', color: '#fff' }}
+                    {project.image_url ? (
+                      <img
+                        src={project.image_url}
+                        alt={project.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <div
+                          className="text-6xl font-black text-white/20"
+                          style={{ fontFamily: "'Poppins', sans-serif" }}
+                        >
+                          {project.title?.charAt(0)}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Hover overlay */}
+                    <div
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-sm"
+                      style={{ backgroundColor: 'rgba(5, 8, 22, 0.65)' }}
                     >
-                      <Eye size={18} />
-                    </Link>
-                    {project.github_url && (
-                      <a
-                        href={project.github_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2.5 rounded-xl transition-all"
+                      <Link
+                        to={`/projects/${project.id}`}
+                        className="p-2.5 rounded-xl transition-all cursor-pointer flex items-center justify-center"
                         style={{ backgroundColor: '#7c3aed', color: '#fff' }}
                       >
-                        <Github size={18} />
-                      </a>
-                    )}
-                    {project.live_url && (
-                      <a
-                        href={project.live_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2.5 rounded-xl transition-all"
-                        style={{ backgroundColor: '#a21caf', color: '#fff' }}
-                      >
-                        <ExternalLink size={18} />
-                      </a>
-                    )}
-                  </div>
-
-                  {/* Featured badge */}
-                  {project.featured && (
-                    <div className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-[#fbbf24]/15 border border-[#fbbf24]/40 rounded-full backdrop-blur-md shadow-lg shadow-amber-500/20">
-                      <Star size={14} className="text-[#fbbf24]" fill="#fbbf24" />
-                    </div>
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="p-6 flex-1 flex flex-col">
-                  <h3
-                    className="text-xl font-bold mb-3 transition-colors"
-                    style={{ color: 'var(--text-primary)', fontFamily: "'Poppins', sans-serif" }}
-                  >
-                    {project.title}
-                  </h3>
-                  <div className="text-[14.5px] mb-5 leading-relaxed transition-colors text-justify" style={{ color: 'var(--text-secondary)' }}>
-                    {(() => {
-                      const text = project.summary || project.description || '';
-                      if (text.length > 220) {
-                        return text.slice(0, 220).trim() + ' .....';
-                      }
-                      return text;
-                    })()}
-                  </div>
-                  <div className="flex flex-wrap gap-1.5 mt-auto">
-                    {(project.tags || []).slice(0, 4).map((tag) => {
-                      const s = getTagStyle(tag);
-                      return (
-                        <span
-                          key={tag}
-                          className="px-2.5 py-0.5 text-xs font-medium rounded-full"
-                          style={{
-                            backgroundColor: s.bg,
-                            border: `1px solid ${s.border}`,
-                            color: s.color,
-                          }}
+                        <Eye size={18} />
+                      </Link>
+                      {project.github_url && (
+                        <a
+                          href={project.github_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2.5 rounded-xl transition-all"
+                          style={{ backgroundColor: '#7c3aed', color: '#fff' }}
                         >
-                          {tag}
-                        </span>
-                      );
-                    })}
+                          <Github size={18} />
+                        </a>
+                      )}
+                      {project.live_url && (
+                        <a
+                          href={project.live_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2.5 rounded-xl transition-all"
+                          style={{ backgroundColor: '#a21caf', color: '#fff' }}
+                        >
+                          <ExternalLink size={18} />
+                        </a>
+                      )}
+                    </div>
+
+                    {/* Featured badge */}
+                    {project.featured && (
+                      <div className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-[#fbbf24]/15 border border-[#fbbf24]/40 rounded-full backdrop-blur-md shadow-lg shadow-amber-500/20">
+                        <Star size={14} className="text-[#fbbf24]" fill="#fbbf24" />
+                      </div>
+                    )}
                   </div>
-                </div>
+
+                  {/* Content */}
+                  <div className="p-6 flex-1 flex flex-col">
+                    <h3
+                      className="text-xl font-bold mb-3 transition-colors"
+                      style={{ color: 'var(--text-primary)', fontFamily: "'Poppins', sans-serif" }}
+                    >
+                      {project.title}
+                    </h3>
+                    <div className="text-[14.5px] mb-5 leading-relaxed transition-colors text-justify" style={{ color: 'var(--text-secondary)' }}>
+                      {(() => {
+                        const text = project.summary || project.description || '';
+                        if (text.length > 220) {
+                          return text.slice(0, 220).trim() + ' .....';
+                        }
+                        return text;
+                      })()}
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 mt-auto">
+                      {(project.tags || []).slice(0, 4).map((tag) => {
+                        const s = getTagStyle(tag);
+                        return (
+                          <span
+                            key={tag}
+                            className="px-2.5 py-0.5 text-xs font-medium rounded-full"
+                            style={{
+                              backgroundColor: s.bg,
+                              border: `1px solid ${s.border}`,
+                              color: s.color,
+                            }}
+                          >
+                            {tag}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Load More Button */}
+            {hasMore && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex justify-center mt-12"
+              >
+                <button
+                  onClick={handleLoadMore}
+                  className="group relative px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-3 overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(162,28,175,0.15) 100%)',
+                    border: '1px solid rgba(124,58,237,0.3)',
+                    color: 'var(--text-primary)',
+                  }}
+                >
+                  <span className="relative z-10">Load More Projects</span>
+                  <ChevronDown 
+                    size={20} 
+                    className="relative z-10 group-hover:translate-y-1 transition-transform duration-300" 
+                  />
+                  
+                  {/* Animated background on hover */}
+                  <div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(124,58,237,0.25) 0%, rgba(162,28,175,0.25) 100%)',
+                    }}
+                  />
+                </button>
               </motion.div>
-            ))}
-          </div>
+            )}
+
+            {/* Show Less Button */}
+            {showLess && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex justify-center mt-12"
+              >
+                <button
+                  onClick={handleShowLess}
+                  className="group relative px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-3 overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(162,28,175,0.15) 0%, rgba(124,58,237,0.15) 100%)',
+                    border: '1px solid rgba(162,28,175,0.3)',
+                    color: 'var(--text-primary)',
+                  }}
+                >
+                  <span className="relative z-10">Show Less</span>
+                  <ChevronUp 
+                    size={20} 
+                    className="relative z-10 group-hover:-translate-y-1 transition-transform duration-300" 
+                  />
+                  
+                  {/* Animated background on hover */}
+                  <div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(162,28,175,0.25) 0%, rgba(124,58,237,0.25) 100%)',
+                    }}
+                  />
+                </button>
+              </motion.div>
+            )}
+          </>
         )}
       </div>
     </section>
