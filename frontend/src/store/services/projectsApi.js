@@ -39,6 +39,14 @@ export const projectsApi = createApi({
       }),
       invalidatesTags: ['Projects'],
     }),
+    reorderProjects: builder.mutation({
+      query: (projects) => ({
+        url: '/projects/reorder',
+        method: 'PUT',
+        body: { projects },
+      }),
+      invalidatesTags: ['Projects'],
+    }),
   }),
 });
 
@@ -47,4 +55,5 @@ export const {
   useCreateProjectMutation,
   useUpdateProjectMutation,
   useDeleteProjectMutation,
+  useReorderProjectsMutation,
 } = projectsApi;

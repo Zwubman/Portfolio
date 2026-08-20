@@ -3,7 +3,7 @@ const { Project } = require('../models');
 // GET /api/projects
 const getProjects = async (req, res) => {
   try {
-    const projects = await Project.findAll({ order: [['created_at', 'DESC']] });
+    const projects = await Project.findAll({ order: [['order_index', 'ASC'], ['created_at', 'DESC']] });
     res.json(projects);
   } catch (error) {
     console.error('Get projects error:', error);
@@ -135,4 +135,27 @@ const deleteProject = async (req, res) => {
   }
 };
 
-module.exports = { getProjects, getProjectById, createProject, updateProject, deleteProject };
+// PUT /api/projects/reorder (Admin) - Bulk update order
+const reorderProjects = async (req, res) => {
+  try {
+    const { projects } = req.body;
+    
+    if (!Array.isArray(projects)) {
+      return res.status(400).json({ message: 'Projects array is required.' });
+    }
+
+    await Promise.all(
+      projects.map(({ id, order_index }) => 
+        Project.update({ order_index }, { where: { id } })
+      )
+    );
+
+    const updatedProjects = await Project.findAll({ order: [['order_index', 'ASC'], ['created_at', 'DESC']] });
+    res.json(updatedProjects);
+  } catch (error) {
+    console.error('Reorder projects error:', error);
+    res.status(500).json({ message: 'Server error.' });
+  }
+};
+
+module.exports = { getProjects, getProjectById, createProject, updateProject, deleteProject, reorderProjects };

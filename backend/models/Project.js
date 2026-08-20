@@ -48,6 +48,10 @@ const Project = sequelize.define('Project', {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+  order_index: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
 }, {
   tableName: 'projects',
   timestamps: true,

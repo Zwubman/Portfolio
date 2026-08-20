@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../store/slices/authSlice';
@@ -7,6 +7,7 @@ import {
   useCreateProjectMutation,
   useUpdateProjectMutation,
   useDeleteProjectMutation,
+  useReorderProjectsMutation,
 } from '../store/services/projectsApi';
 import {
   useGetExperiencesQuery,
@@ -28,9 +29,123 @@ import {
   FolderKanban, Briefcase, Mail, LogOut, ArrowLeft, Plus,
   Trash2, Edit, Check, Eye, Trash, ExternalLink, Calendar,
   MapPin, ToggleLeft, ToggleRight, Sparkles, Send, X, Code2,
-  FileText, UploadCloud, Download, RefreshCw
+  FileText, UploadCloud, Download, RefreshCw, GripVertical
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
+// Sortable Project Item Component
+function SortableProjectItem({ project, onEdit, onDelete }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: project.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="rounded-2xl border border-purple-500/10 bg-purple-500/5 p-4 flex items-center gap-4"
+    >
+      <div
+        {...attributes}
+        {...listeners}
+        className="cursor-grab active:cursor-grabbing text-purple-400 hover:text-purple-300 flex-shrink-0"
+      >
+        <GripVertical size={20} />
+      </div>
+
+      <div className="flex-shrink-0">
+        {project.image_url ? (
+          <img
+            src={project.image_url}
+            alt={project.title}
+            className="w-16 h-16 object-cover rounded-lg border border-purple-500/10"
+          />
+        ) : (
+          <div className="w-16 h-16 bg-purple-950/40 rounded-lg flex items-center justify-center border border-purple-500/5 text-purple-300/20 text-xs">
+            No Image
+          </div>
+        )}
+      </div>
+
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-1">
+          <h3 className="font-bold text-purple-100 truncate">{project.title}</h3>
+          {project.featured && (
+            <span className="text-[10px] bg-amber-500/10 text-amber-300 border border-amber-500/20 px-2 py-0.5 rounded-full font-bold flex-shrink-0">
+              Featured
+            </span>
+          )}
+        </div>
+        <p className="text-purple-300/50 text-xs line-clamp-2">{project.summary || project.description}</p>
+      </div>
+
+      <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex gap-1">
+          {project.github_url && (
+            <a
+              href={project.github_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1.5 text-purple-300 hover:text-white hover:bg-purple-500/10 rounded-lg"
+            >
+              <Code2 size={14} />
+            </a>
+          )}
+          {project.live_url && (
+            <a
+              href={project.live_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-1.5 text-purple-300 hover:text-white hover:bg-purple-500/10 rounded-lg"
+            >
+              <ExternalLink size={14} />
+            </a>
+          )}
+        </div>
+        <div className="w-px h-6 bg-purple-500/10" />
+        <button
+          onClick={() => onEdit(project)}
+          className="p-1.5 rounded-lg text-purple-300 hover:text-white hover:bg-purple-500/10 cursor-pointer"
+        >
+          <Edit size={14} />
+        </button>
+        <button
+          onClick={() => onDelete(project.id)}
+          className="p-1.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 cursor-pointer"
+        >
+          <Trash size={14} />
+        </button>
+      </div>
+    </div>
+  );
+}
 
 // ─── Resume/CV Management Sub-Component ───────────────────────────────────────
 function ResumeTab() {
@@ -161,6 +276,7 @@ export default function AdminDashboard() {
   const [createProject] = useCreateProjectMutation();
   const [updateProject] = useUpdateProjectMutation();
   const [deleteProject] = useDeleteProjectMutation();
+  const [reorderProjects] = useReorderProjectsMutation();
 
   const [createExperience] = useCreateExperienceMutation();
   const [updateExperience] = useUpdateExperienceMutation();
@@ -168,6 +284,50 @@ export default function AdminDashboard() {
 
   const [markMessageAsRead] = useMarkAsReadMutation();
   const [deleteMessage] = useDeleteMessageMutation();
+
+  // Local state for drag-and-drop
+  const [localProjects, setLocalProjects] = useState([]);
+
+  // Sync projects from server to local state
+  useEffect(() => {
+    if (projects.length > 0) {
+      setLocalProjects([...projects]);
+    }
+  }, [projects]);
+
+  // Drag-and-drop sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Handle drag end
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      const oldIndex = localProjects.findIndex((p) => p.id === active.id);
+      const newIndex = localProjects.findIndex((p) => p.id === over.id);
+
+      const reordered = arrayMove(localProjects, oldIndex, newIndex);
+      setLocalProjects(reordered);
+
+      const payload = reordered.map((proj, index) => ({
+        id: proj.id,
+        order_index: index,
+      }));
+
+      try {
+        await reorderProjects(payload).unwrap();
+        toast.success('Project order saved!');
+      } catch (err) {
+        toast.error('Failed to save order.');
+        setLocalProjects([...projects]);
+      }
+    }
+  };
 
   // Project Form State
   const [projectForm, setProjectForm] = useState({
@@ -518,7 +678,10 @@ export default function AdminDashboard() {
         {activeTab === 'projects' && (
           <div>
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-purple-100">Manage Projects</h2>
+              <div>
+                <h2 className="text-xl font-bold text-purple-100">Manage Projects</h2>
+                <p className="text-xs text-purple-300/50 mt-1">Drag to reorder • Changes save automatically</p>
+              </div>
               <button
                 onClick={openProjectCreate}
                 className="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white text-sm font-semibold flex items-center gap-2 hover:opacity-90 transition-all cursor-pointer"
@@ -531,81 +694,32 @@ export default function AdminDashboard() {
               <div className="flex justify-center p-12">
                 <div className="w-8 h-8 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
               </div>
-            ) : projects.length === 0 ? (
+            ) : localProjects.length === 0 ? (
               <div className="text-center py-12 border border-dashed border-purple-500/10 rounded-2xl">
                 <p className="text-purple-300/40">No projects added yet.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {projects.map((proj) => (
-                  <div
-                    key={proj.id}
-                    className="rounded-2xl border border-purple-500/10 bg-purple-500/5 p-4 flex flex-col justify-between"
-                  >
-                    <div>
-                      {proj.image_url ? (
-                        <img
-                          src={proj.image_url}
-                          alt={proj.title}
-                          className="w-full h-36 object-cover rounded-xl mb-4 border border-purple-500/10"
-                        />
-                      ) : (
-                        <div className="w-full h-36 bg-purple-950/40 rounded-xl mb-4 flex items-center justify-center border border-purple-500/5 text-purple-300/20 text-xs">
-                          No Image Link
-                        </div>
-                      )}
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-bold text-purple-100 mb-1 line-clamp-1">{proj.title}</h3>
-                        {proj.featured && (
-                          <span className="text-[10px] bg-amber-500/10 text-amber-300 border border-amber-500/20 px-2 py-0.5 rounded-full font-bold">
-                            Featured
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-purple-300/50 text-xs line-clamp-3 mb-4">{proj.description}</p>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-4 border-t border-purple-500/10">
-                      <div className="flex gap-2">
-                        {proj.github_url && (
-                          <a
-                            href={proj.github_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-purple-300 hover:text-white"
-                          >
-                            <Code2 size={16} />
-                          </a>
-                        )}
-                        {proj.live_url && (
-                          <a
-                            href={proj.live_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-purple-300 hover:text-white"
-                          >
-                            <ExternalLink size={16} />
-                          </a>
-                        )}
-                      </div>
-                      <div className="flex gap-1">
-                        <button
-                          onClick={() => openProjectEdit(proj)}
-                          className="p-1.5 rounded-lg text-purple-300 hover:text-white hover:bg-purple-500/10 cursor-pointer"
-                        >
-                          <Edit size={14} />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteProject(proj.id)}
-                          className="p-1.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 cursor-pointer"
-                        >
-                          <Trash size={14} />
-                        </button>
-                      </div>
-                    </div>
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={localProjects.map(p => p.id)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <div className="space-y-3">
+                    {localProjects.map((proj) => (
+                      <SortableProjectItem
+                        key={proj.id}
+                        project={proj}
+                        onEdit={openProjectEdit}
+                        onDelete={handleDeleteProject}
+                      />
+                    ))}
                   </div>
-                ))}
-              </div>
+                </SortableContext>
+              </DndContext>
             )}
           </div>
         )}
