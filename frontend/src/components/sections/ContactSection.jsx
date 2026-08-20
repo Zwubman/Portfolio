@@ -125,7 +125,7 @@ export default function ContactSection() {
                     Phone
                   </p>
                   <p className="text-[14.5px] font-medium" style={{ color: 'var(--text-secondary)' }}>
-                    +251 92 123 4567
+                    +251 92 8398632
                   </p>
                 </div>
               </div>
