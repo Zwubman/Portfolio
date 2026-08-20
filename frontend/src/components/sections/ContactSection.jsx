@@ -150,6 +150,34 @@ export default function ContactSection() {
                   </p>
                 </div>
               </div>
+
+              {/* Availability Card */}
+              <div
+                className="flex items-center gap-5 p-5 rounded-md"
+                style={{ backgroundColor: 'var(--bg-card)', border: '1px solid rgba(34, 197, 94, 0.15)' }}
+              >
+                <div
+                  className="w-11 h-11 rounded-md flex items-center justify-center shrink-0 relative"
+                  style={{ backgroundColor: 'var(--bg-primary)', border: '1px solid rgba(34, 197, 94, 0.25)' }}
+                >
+                  {/* Green online indicator dot */}
+                  <div className="relative">
+                    <div className="w-3 h-3 bg-emerald-500 rounded-full" />
+                    <div className="absolute inset-0 w-3 h-3 bg-emerald-500 rounded-full animate-ping opacity-75" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest mb-1" style={{ color: 'var(--text-muted)' }}>
+                    Availability
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-emerald-500 font-semibold text-[14.5px]">Online</span>
+                    <span className="text-[14.5px] font-bold" style={{ color: 'var(--text-secondary)' }}>
+                      • 24 Hours / 7 Days
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
 
