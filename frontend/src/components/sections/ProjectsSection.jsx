@@ -274,7 +274,7 @@ export default function ProjectsSection() {
                     >
                       {project.title}
                     </h3>
-                    <div className="text-[14.5px] mb-5 leading-relaxed transition-colors text-justify" style={{ color: 'var(--text-secondary)' }}>
+                    <div className="text-[14.5px] mb-3 leading-relaxed transition-colors text-justify" style={{ color: 'var(--text-secondary)' }}>
                       {(() => {
                         const text = project.summary || project.description || '';
                         if (text.length > 220) {
@@ -283,7 +283,7 @@ export default function ProjectsSection() {
                         return text;
                       })()}
                     </div>
-                    <div className="flex flex-wrap gap-1.5 mt-auto">
+                    <div className="flex flex-wrap gap-1.5">
                       {(project.tags || []).map((tag) => {
                         const s = getTagStyle(tag);
                         return (
